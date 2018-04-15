@@ -213,9 +213,11 @@ var activateMap = function () {
   form.classList.remove('ad-form--disabled');
   mapPinMain.removeEventListener('mouseup', activateMap);
   renderPins(adCards);
+  popup.classList.remove('hidden');
   removeInputDisabled(fieldsets);
   buttons = document.querySelectorAll('.map__pins button[type="button"]');
   buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+
 };
 
 map.addEventListener('click', function (evt) {
