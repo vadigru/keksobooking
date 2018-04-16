@@ -17,6 +17,7 @@ var MAX_ROOMS = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var MAX_USER = 8;
+var ESC_KEYCODE = 27;
 
 var getAvatar = function (index) {
   var avas = index + 1;
@@ -213,22 +214,23 @@ var activateMap = function () {
   form.classList.remove('ad-form--disabled');
   mapPinMain.removeEventListener('mouseup', activateMap);
   renderPins(adCards);
-  popup.classList.remove('hidden');
   removeInputDisabled(fieldsets);
   buttons = document.querySelectorAll('.map__pins button[type="button"]');
   buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+};
 
+var renderNewPopup = function (arr) {
+  renderPopup(arr);
+  popup.classList.remove('hidden');
 };
 
 map.addEventListener('click', function (evt) {
   var target = evt.target;
   for (var i = 0; i < buttons.length; i++) {
     if (target === buttons[i]) {
-      renderPopup(adCards[i]);
-      popup.classList.remove('hidden');
+      renderNewPopup(adCards[i]);
     } else if (target === buttonsImg[i]) {
-      renderPopup(adCards[i]);
-      popup.classList.remove('hidden');
+      renderNewPopup(adCards[i]);
     }
   }
 });
@@ -241,3 +243,8 @@ map.addEventListener('click', function (evt) {
 });
 
 mapPinMain.addEventListener('mouseup', activateMap);
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    popup.classList.add('hidden');
+  }
+});
