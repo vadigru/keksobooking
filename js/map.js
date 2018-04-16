@@ -181,7 +181,6 @@ var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
 var fieldsets = document.querySelectorAll('.notice fieldset');
 var form = document.querySelector('.notice form');
-var address = document.querySelector('#address');
 var popup = document.querySelector('.popup:last-child');
 var buttons;
 var buttonsImg;
@@ -189,25 +188,16 @@ popup.classList.add('hidden');
 
 var setInputDisabled = function (arr) {
   for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = 'disabled';
+    fieldsets[i].disabled = true;
   }
 };
 setInputDisabled(fieldsets);
 
 var removeInputDisabled = function (arr) {
   for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = '';
+    fieldsets[i].disabled = false;
   }
 };
-
-var getPosition = function (obj) {
-  var posX = obj.offsetLeft;
-  var posY = obj.offsetTop;
-  var width = obj.offsetWidth;
-  var height = obj.offsetWidth;
-  address.value = Math.round(posX + width / 2) + ', ' + Math.round(posY + height / 2);
-};
-getPosition(mapPinMain);
 
 var activateMap = function () {
   map.classList.remove('map--faded');
@@ -227,9 +217,7 @@ var renderNewPopup = function (arr) {
 map.addEventListener('click', function (evt) {
   var target = evt.target;
   for (var i = 0; i < buttons.length; i++) {
-    if (target === buttons[i]) {
-      renderNewPopup(adCards[i]);
-    } else if (target === buttonsImg[i]) {
+    if (target === buttons[i] || target === buttonsImg[i]) {
       renderNewPopup(adCards[i]);
     }
   }
@@ -247,4 +235,141 @@ document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     popup.classList.add('hidden');
   }
+});
+
+// -----------------------------------------------------------
+
+var submitForm = document.querySelector('.ad-form');
+var formTitle = document.querySelector('#title');
+var formType = document.querySelector('#type');
+var formPrice = document.querySelector('#price');
+var formAddress = document.querySelector('#address');
+var formTimein = document.querySelector('#timein');
+var formTimeout = document.querySelector('#timeout');
+var roomNumber = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+
+submitForm.action = 'https://js.dump.academy/keksobooking';
+formTitle.required = true;
+formPrice.required = true;
+formPrice.max = 1000000;
+
+var linkingTypeAndPrice = function () {
+  if (formType.options[0].selected === true) {
+    formPrice.min = 1000;
+    formPrice.placeholder = '1000';
+  } else if (formType.options[1].selected === true) {
+    formPrice.min = 0;
+    formPrice.placeholder = '0';
+  } else if (formType.options[2].selected === true) {
+    formPrice.min = 5000;
+    formPrice.placeholder = '5000';
+  } else if (formType.options[3].selected === true) {
+    formPrice.min = 10000;
+    formPrice.placeholder = '10000';
+  }
+};
+
+var linkingTimeinAndTimeout = function () {
+  if (formTimein.options[0].selected === true) {
+    formTimeout.options[0].selected = true;
+  } else if (formTimein.options[1].selected === true) {
+    formTimeout.options[1].selected = true;
+  } else if (formTimein.options[2].selected === true) {
+    formTimeout.options[2].selected = true;
+  }
+};
+
+var linkingTimeinAndTimeoutReverse = function () {
+  if (formTimeout.options[0].selected === true) {
+    formTimein.options[0].selected = true;
+  } else if (formTimeout.options[1].selected === true) {
+    formTimein.options[1].selected = true;
+  } else if (formTimeout.options[2].selected === true) {
+    formTimein.options[2].selected = true;
+  }
+};
+
+var linkingRoomnumberAndCapacity = function () {
+  if (roomNumber.options[0].selected === true) {
+    capacity.options[0].disabled = true;
+    capacity.options[1].disabled = true;
+    capacity.options[2].selected = true;
+    capacity.options[3].disabled = true;
+  } else if (roomNumber.options[1].selected === true) {
+    capacity.options[0].disabled = true;
+    capacity.options[1].selected = true;
+    capacity.options[2].disabled = false;
+    capacity.options[3].disabled = true;
+  } else if (roomNumber.options[2].selected === true) {
+    capacity.options[0].selected = true;
+    capacity.options[1].disabled = false;
+    capacity.options[2].disabled = false;
+    capacity.options[3].disabled = true;
+  } else if (roomNumber.options[3].selected === true) {
+    capacity.options[0].disabled = true;
+    capacity.options[1].disabled = true;
+    capacity.options[2].disabled = true;
+    capacity.options[3].selected = true;
+  }
+};
+
+formType.addEventListener('change', linkingTypeAndPrice);
+formTimein.addEventListener('change', linkingTimeinAndTimeout);
+formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
+roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
+
+// -----------------------------------------------------------
+
+mapPinMain.draggable = 'true';
+
+var posX;
+var posY;
+var width;
+var height;
+
+var getPosition = function (obj) {
+  posX = obj.offsetLeft;
+  posY = obj.offsetTop;
+  width = obj.offsetWidth;
+  height = obj.offsetWidth;
+  formAddress.value = Math.round(posX + width / 2) + ', ' + Math.round(posY + height / 2);
+};
+getPosition(mapPinMain);
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    formAddress.value = (mapPinMain.offsetTop - shift.y) + ', ' + (mapPinMain.offsetLeft - shift.x);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
