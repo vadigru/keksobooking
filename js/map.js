@@ -245,8 +245,7 @@ document.addEventListener('keydown', function (evt) {
 // -----------------------------------------------------------
 
 var submitForm = document.querySelector('.ad-form');
-var submitFormButton = document.querySelector('.ad-form__submit');
-//var formTitle = document.querySelector('#title');
+// var formTitle = document.querySelector('#title');
 var formType = document.querySelector('#type');
 var formPrice = document.querySelector('#price');
 var formAddress = document.querySelector('#address');
