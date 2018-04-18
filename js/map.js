@@ -176,30 +176,6 @@ var renderPopup = function (popupData) {
 
 map.insertBefore(popupElement, mapContainer);
 
-// -----------------------------------------------------------
-
-var mapPins = document.querySelector('.map__pins');
-var mapPinMain = document.querySelector('.map__pin--main');
-var fieldsets = document.querySelectorAll('.notice fieldset');
-var form = document.querySelector('.notice form');
-var popup = document.querySelector('.popup:last-child');
-var buttons;
-var buttonsImg;
-popup.classList.add('hidden');
-
-var setInputDisabled = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = true;
-  }
-};
-setInputDisabled(fieldsets);
-
-var removeInputDisabled = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = false;
-  }
-};
-
 var renderNewPopup = function (arr) {
   renderPopup(arr);
   popup.classList.remove('hidden');
@@ -221,6 +197,31 @@ map.addEventListener('click', function (evt) {
   }
 });
 
+// переход страницы в активный/неактивный режим, сброс формы ------------------
+
+var mapPins = document.querySelector('.map__pins');
+var mapPinMain = document.querySelector('.map__pin--main');
+var popup = document.querySelector('.popup:last-child');
+var fieldsets = document.querySelectorAll('.notice fieldset');
+var form = document.querySelector('.notice form');
+var buttons;
+var buttonsImg;
+var reset = document.querySelector('.ad-form__reset');
+popup.classList.add('hidden');
+
+var setInputDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    fieldsets[i].disabled = true;
+  }
+};
+setInputDisabled(fieldsets);
+
+var removeInputDisabled = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+};
+
 var activateMap = function (evt) {
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
@@ -234,6 +235,29 @@ var activateMap = function (evt) {
   }
 };
 
+var deactivateMap = function () {
+  map.classList.add('map--faded');
+  form.classList.add('ad-form--disabled');
+  mapPinMain.addEventListener('mouseup', activateMap);
+  setInputDisabled(fieldsets);
+  form.reset();
+  buttons = document.querySelectorAll('.map__pins button[type="button"]');
+  buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+
+  for (var i = 0; i < buttons.length; i++) {
+    mapPins.removeChild(buttons[i]);
+  }
+
+  if (popup) {
+    popup.classList.add('hidden');
+  }
+
+  mapPinMain.style.left = pinMainPosX + 'px';
+  mapPinMain.style.top = pinMainPosY + 'px';
+
+  formAddress.value = pinMainAddressInitialPositionX + ', ' + pinMainAddressInitialPositionY;
+};
+
 mapPinMain.addEventListener('mouseup', activateMap);
 mapPinMain.addEventListener('keydown', activateMap);
 document.addEventListener('keydown', function (evt) {
@@ -241,8 +265,10 @@ document.addEventListener('keydown', function (evt) {
     popup.classList.add('hidden');
   }
 });
+reset.addEventListener('click', deactivateMap);
 
-// -----------------------------------------------------------
+
+// валидация формы ------------------------------------------------------------
 
 var submitForm = document.querySelector('.ad-form');
 // var formTitle = document.querySelector('#title');
@@ -360,7 +386,7 @@ formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
 roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
 capacity.addEventListener('change', linkingRoomnumberAndCapacityReverse);
 
-// -----------------------------------------------------------
+// перетаскивание метки по карте ----------------------------------------------
 
 var mapWidth = map.offsetWidth;
 var pinMainPosX = mapPinMain.offsetLeft;
@@ -423,30 +449,3 @@ mapPinMain.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 });
 
-// -----------------------------------------------------------
-
-var reset = document.querySelector('.ad-form__reset');
-
-var deactivateMap = function () {
-  map.classList.add('map--faded');
-  form.classList.add('ad-form--disabled');
-  mapPinMain.addEventListener('mouseup', activateMap);
-  setInputDisabled(fieldsets);
-  buttons = document.querySelectorAll('.map__pins button[type="button"]');
-  buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
-
-  for (var i = 0; i < buttons.length; i++) {
-    mapPins.removeChild(buttons[i]);
-  }
-
-  if (popup) {
-    popup.classList.add('hidden');
-  }
-
-  mapPinMain.style.left = pinMainPosX + 'px';
-  mapPinMain.style.top = pinMainPosY + 'px';
-
-  formAddress.value = pinMainAddressInitialPositionX + ', ' + pinMainAddressInitialPositionY;
-};
-
-reset.addEventListener('click', deactivateMap);
