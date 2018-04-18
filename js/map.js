@@ -18,6 +18,7 @@ var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var MAX_USER = 8;
 var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 var getAvatar = function (index) {
   var avas = index + 1;
@@ -152,8 +153,8 @@ var renderFeatures = function (feature) {
   return fragment;
 };
 
-var blockMap = document.querySelector('.map');
-var blockMapContainer = document.querySelector('.map__filter-container');
+var map = document.querySelector('.map');
+var mapContainer = document.querySelector('.map__filter-container');
 var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
 var popupElement = similarPopupElement.cloneNode(true);
 
@@ -173,15 +174,14 @@ var renderPopup = function (popupData) {
   return popupElement;
 };
 
-blockMap.insertBefore(popupElement, blockMapContainer);
+map.insertBefore(popupElement, mapContainer);
 
 // -----------------------------------------------------------
 
-var map = document.querySelector('.map');
+var mapPins = document.querySelector('.map__pins');
 var mapPinMain = document.querySelector('.map__pin--main');
 var fieldsets = document.querySelectorAll('.notice fieldset');
 var form = document.querySelector('.notice form');
-var address = document.querySelector('#address');
 var popup = document.querySelector('.popup:last-child');
 var buttons;
 var buttonsImg;
@@ -189,34 +189,15 @@ popup.classList.add('hidden');
 
 var setInputDisabled = function (arr) {
   for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = 'disabled';
+    fieldsets[i].disabled = true;
   }
 };
 setInputDisabled(fieldsets);
 
 var removeInputDisabled = function (arr) {
   for (var i = 0; i < arr.length; i++) {
-    fieldsets[i].disabled = '';
+    fieldsets[i].disabled = false;
   }
-};
-
-var getPosition = function (obj) {
-  var posX = obj.offsetLeft;
-  var posY = obj.offsetTop;
-  var width = obj.offsetWidth;
-  var height = obj.offsetWidth;
-  address.value = Math.round(posX + width / 2) + ', ' + Math.round(posY + height / 2);
-};
-getPosition(mapPinMain);
-
-var activateMap = function () {
-  map.classList.remove('map--faded');
-  form.classList.remove('ad-form--disabled');
-  mapPinMain.removeEventListener('mouseup', activateMap);
-  renderPins(adCards);
-  removeInputDisabled(fieldsets);
-  buttons = document.querySelectorAll('.map__pins button[type="button"]');
-  buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
 };
 
 var renderNewPopup = function (arr) {
@@ -227,9 +208,7 @@ var renderNewPopup = function (arr) {
 map.addEventListener('click', function (evt) {
   var target = evt.target;
   for (var i = 0; i < buttons.length; i++) {
-    if (target === buttons[i]) {
-      renderNewPopup(adCards[i]);
-    } else if (target === buttonsImg[i]) {
+    if (target === buttons[i] || target === buttonsImg[i]) {
       renderNewPopup(adCards[i]);
     }
   }
@@ -242,9 +221,232 @@ map.addEventListener('click', function (evt) {
   }
 });
 
+var activateMap = function (evt) {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+  mapPinMain.removeEventListener('mouseup', activateMap);
+  renderPins(adCards);
+  removeInputDisabled(fieldsets);
+  buttons = document.querySelectorAll('.map__pins button[type="button"]');
+  buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+  if (evt.keyCode === ENTER_KEYCODE) {
+    popup.classList.add('hidden');
+  }
+};
+
 mapPinMain.addEventListener('mouseup', activateMap);
+mapPinMain.addEventListener('keydown', activateMap);
 document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     popup.classList.add('hidden');
   }
 });
+
+// -----------------------------------------------------------
+
+var submitForm = document.querySelector('.ad-form');
+// var formTitle = document.querySelector('#title');
+var formType = document.querySelector('#type');
+var formPrice = document.querySelector('#price');
+var formAddress = document.querySelector('#address');
+var formTimein = document.querySelector('#timein');
+var formTimeout = document.querySelector('#timeout');
+var roomNumber = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+
+submitForm.action = 'https://js.dump.academy/keksobooking';
+
+var linkingTypeAndPrice = function () {
+  if (formType.options[0].selected === true) {
+    formPrice.min = 1000;
+    formPrice.placeholder = 'от 1000 руб';
+    formPrice.value = '';
+  } else if (formType.options[1].selected === true) {
+    formPrice.min = 0;
+    formPrice.placeholder = 'от 0 руб';
+    formPrice.value = '';
+  } else if (formType.options[2].selected === true) {
+    formPrice.min = 5000;
+    formPrice.placeholder = 'от 5000 руб';
+    formPrice.value = '';
+  } else if (formType.options[3].selected === true) {
+    formPrice.min = 10000;
+    formPrice.placeholder = 'от 10000 руб';
+    formPrice.value = '';
+  }
+};
+
+var linkingTimeinAndTimeout = function () {
+  if (formTimein.options[0].selected === true) {
+    formTimeout.options[0].selected = true;
+  } else if (formTimein.options[1].selected === true) {
+    formTimeout.options[1].selected = true;
+  } else if (formTimein.options[2].selected === true) {
+    formTimeout.options[2].selected = true;
+  }
+};
+
+var linkingTimeinAndTimeoutReverse = function () {
+  if (formTimeout.options[0].selected === true) {
+    formTimein.options[0].selected = true;
+  } else if (formTimeout.options[1].selected === true) {
+    formTimein.options[1].selected = true;
+  } else if (formTimeout.options[2].selected === true) {
+    formTimein.options[2].selected = true;
+  }
+};
+
+var linkingRoomnumberAndCapacity = function () {
+  var roomNumberSel = roomNumber.options[roomNumber.selectedIndex].value;
+  if (roomNumberSel === '1') {
+    capacity.options[0].disabled = true;
+    capacity.options[1].disabled = true;
+    capacity.options[2].selected = true;
+    capacity.options[2].disabled = false;
+    capacity.options[3].disabled = true;
+  } else if (roomNumberSel === '2') {
+    capacity.options[0].disabled = true;
+    capacity.options[1].selected = true;
+    capacity.options[1].disabled = false;
+    capacity.options[2].disabled = false;
+    capacity.options[3].disabled = true;
+  } else if (roomNumberSel === '3') {
+    capacity.options[0].selected = true;
+    capacity.options[0].disabled = false;
+    capacity.options[1].disabled = false;
+    capacity.options[2].disabled = false;
+    capacity.options[3].disabled = true;
+  } else if (roomNumberSel === '100') {
+    capacity.options[0].disabled = true;
+    capacity.options[1].disabled = true;
+    capacity.options[2].disabled = true;
+    capacity.options[3].disabled = false;
+    capacity.options[3].selected = true;
+  }
+};
+
+var linkingRoomnumberAndCapacityReverse = function () {
+  var capacitySel = capacity.options[capacity.selectedIndex].value;
+  if (capacitySel === '3') {
+    roomNumber.options[0].disabled = true;
+    roomNumber.options[1].disabled = true;
+    roomNumber.options[2].selected = true;
+    roomNumber.options[2].disabled = false;
+    roomNumber.options[3].disabled = true;
+  } else if (capacitySel === '2') {
+    roomNumber.options[0].disabled = true;
+    roomNumber.options[1].disabled = false;
+    roomNumber.options[2].selected = true;
+    roomNumber.options[2].disabled = false;
+    roomNumber.options[3].disabled = true;
+  } else if (capacitySel === '1') {
+    roomNumber.options[0].disabled = false;
+    roomNumber.options[1].selected = true;
+    roomNumber.options[1].disabled = false;
+    roomNumber.options[2].disabled = true;
+    roomNumber.options[3].disabled = true;
+  } else if (capacitySel === '0') {
+    roomNumber.options[0].disabled = true;
+    roomNumber.options[1].disabled = true;
+    roomNumber.options[2].disabled = true;
+    roomNumber.options[3].selected = true;
+    roomNumber.options[3].disabled = false;
+  }
+};
+
+formType.addEventListener('change', linkingTypeAndPrice);
+formTimein.addEventListener('change', linkingTimeinAndTimeout);
+formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
+roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
+capacity.addEventListener('change', linkingRoomnumberAndCapacityReverse);
+
+// -----------------------------------------------------------
+
+var mapWidth = map.offsetWidth;
+var pinMainPosX = mapPinMain.offsetLeft;
+var pinMainPosY = mapPinMain.offsetTop;
+var pinMainWidth = mapPinMain.offsetWidth;
+var pinMainHeight = mapPinMain.offsetHeight;
+var pinMainAddressInitialPositionX = Math.round(pinMainPosX + pinMainWidth / 2);
+var pinMainAddressInitialPositionY = Math.round(pinMainPosY + pinMainHeight / 2);
+var pinMainWidthHalf = Math.round(pinMainWidth / 2);
+var POS_MIN_Y = 150;
+var POS_MAX_Y = 500;
+mapPinMain.draggable = 'true';
+formAddress.value = pinMainAddressInitialPositionX + ', ' + pinMainAddressInitialPositionY;
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    if ((mapPinMain.offsetTop - shift.y) < POS_MIN_Y - pinMainHeight) {
+      mapPinMain.style.top = POS_MIN_Y - pinMainHeight + 'px';
+    } else if (((mapPinMain.offsetTop - shift.y) > POS_MAX_Y)) {
+      mapPinMain.style.top = POS_MAX_Y + 'px';
+    } else {
+      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+    }
+
+    if ((mapPinMain.offsetLeft - shift.x) < (mapWidth - mapWidth)) {
+      mapPinMain.style.left = mapWidth - mapWidth + 'px';
+    } else if ((mapPinMain.offsetLeft - shift.x) > mapWidth - pinMainWidth) {
+      mapPinMain.style.left = mapWidth - pinMainWidth + 'px';
+    } else {
+      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    }
+    formAddress.value = ((mapPinMain.offsetLeft + pinMainWidthHalf) - shift.x) + ', ' + ((mapPinMain.offsetTop + pinMainHeight) - shift.y);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+// -----------------------------------------------------------
+
+var reset = document.querySelector('.ad-form__reset');
+
+var deactivateMap = function () {
+  map.classList.add('map--faded');
+  form.classList.add('ad-form--disabled');
+  mapPinMain.addEventListener('mouseup', activateMap);
+  setInputDisabled(fieldsets);
+  buttons = document.querySelectorAll('.map__pins button[type="button"]');
+  buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+
+  for (var i = 0; i < buttons.length; i++) {
+    mapPins.removeChild(buttons[i]);
+  }
+
+  if (popup) {
+    popup.classList.add('hidden');
+  }
+
+  mapPinMain.style.left = pinMainPosX + 'px';
+  mapPinMain.style.top = pinMainPosY + 'px';
+
+  formAddress.value = pinMainAddressInitialPositionX + ', ' + pinMainAddressInitialPositionY;
+};
+
+reset.addEventListener('click', deactivateMap);
