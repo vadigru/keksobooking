@@ -5,7 +5,6 @@
   // form validation  ---------------------------------------------------------
 
   var submitForm = document.querySelector('.ad-form');
-  var formTitle = document.querySelector('#title');
   var formType = document.querySelector('#type');
   var formPrice = document.querySelector('#price');
   var formTimein = document.querySelector('#timein');
