@@ -2,8 +2,6 @@
 
 (function () {
 
-  // form validation  ---------------------------------------------------------
-
   var submitForm = document.querySelector('.ad-form');
   var formType = document.querySelector('#type');
   var formPrice = document.querySelector('#price');
@@ -11,8 +9,50 @@
   var formTimeout = document.querySelector('#timeout');
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
+  var success = document.querySelector('.success');
+  var error = document.querySelector('.error');
 
   submitForm.action = 'https://js.dump.academy/keksobooking';
+
+  // form data upload success and error handling ------------------------------
+
+  var showSuccess = function () {
+    success.classList.remove('hidden');
+  };
+
+  var hideSuccess = function () {
+    setTimeout(function () {
+      success.classList.add('hidden');
+    }, 3000);
+  };
+
+  var showError = function () {
+    error.classList.remove('hidden');
+  };
+
+  var hideError = function () {
+    setTimeout(function () {
+      error.classList.add('hidden');
+    }, 3000);
+  };
+
+  var formSuccessHandler = function () {
+    showSuccess();
+    window.deactivateMap();
+    hideSuccess();
+  };
+
+  var formErrorHandler = function () {
+    showError();
+    hideError();
+  };
+
+  submitForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(submitForm), formSuccessHandler, formErrorHandler);
+    evt.preventDefault();
+  });
+
+  // form validation  ---------------------------------------------------------
 
   var linkingTypeAndPrice = function () {
     if (formType.options[0].selected === true) {
