@@ -12,8 +12,6 @@
   var success = document.querySelector('.success');
   var error = document.querySelector('.error');
 
-  submitForm.action = 'https://js.dump.academy/keksobooking';
-
   // form data upload success and error handling ------------------------------
 
   var showSuccess = function () {

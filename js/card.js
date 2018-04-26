@@ -66,7 +66,6 @@
     window.const.map.insertAdjacentElement('afterbegin', nodeIn);
   };
 
-
   window.backend.load(successHandler, errorHandler);
 
   // error small dialog close -------------------------------------------------
