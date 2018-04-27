@@ -1,10 +1,10 @@
 'use strict';
 
 (function () {
-  var uploadURL = 'https://js.dump.academy/keksobooking';
-  var loadURL = 'https://js.dump.academy/keksobooking/data';
-  var serverTime = 10000;
-  var statusOk = 200;
+  var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
+  var SERVER_TIME = 10000;
+  var STATUS_OK = 200;
 
   // success/error handling function ------------------------------------------
 
@@ -13,7 +13,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === statusOk) {
+      if (xhr.status === STATUS_OK) {
         onLoad(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -26,7 +26,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = serverTime;
+    xhr.timeout = SERVER_TIME;
 
     return xhr;
   };
@@ -35,7 +35,7 @@
 
   var load = function (onLoad, onError) {
     var xhr = setup(onLoad, onError);
-    xhr.open('GET', loadURL);
+    xhr.open('GET', LOAD_URL);
     xhr.send();
   };
 
@@ -43,7 +43,7 @@
 
   var upload = function (data, onLoad, onError) {
     var xhr = setup(onLoad, onError);
-    xhr.open('POST', uploadURL);
+    xhr.open('POST', UPLOAD_URL);
     xhr.send(data);
   };
 
