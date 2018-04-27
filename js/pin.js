@@ -10,13 +10,7 @@
     adCardsData.forEach(function (item) {
       var pinElement = similarPinElement.cloneNode(true);
       pinElement.querySelector('img').src = item.author.avatar;
-      pinElement.style =
-        'left: ' +
-        (item.location.x - 25) +
-        'px; ' +
-        'top:' +
-        (item.location.y - 70) +
-        'px';
+      pinElement.style = 'left: ' + (item.location.x - 25) + 'px; ' + 'top:' + (item.location.y - 70) + 'px';
       fragment.appendChild(pinElement);
     });
     template.appendChild(fragment);

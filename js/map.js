@@ -34,7 +34,7 @@ var activateMap = function (evt) {
   window.const.map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
   mapPinMain.removeEventListener('mouseup', activateMap);
-  window.renderPins(window.adCards);
+  window.renderPins(window.const.adCards);
   removeInputDisabled(fieldsets);
   buttons = document.querySelectorAll('.map__pins button[type="button"]');
   buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
@@ -43,7 +43,7 @@ var activateMap = function (evt) {
   }
 };
 
-var deactivateMap = function () {
+window.deactivateMap = function () {
   window.const.map.classList.add('map--faded');
   form.classList.add('ad-form--disabled');
   mapPinMain.addEventListener('mouseup', activateMap);
@@ -77,7 +77,7 @@ window.const.map.addEventListener('click', function (evt) {
   var target = evt.target;
   for (var i = 0; i < buttons.length; i++) {
     if (target === buttons[i] || target === buttonsImg[i]) {
-      renderNewPopup(window.adCards[i]);
+      renderNewPopup(window.const.adCards[i]);
     }
   }
 });
@@ -91,7 +91,7 @@ document.addEventListener('keydown', function (evt) {
   }
 });
 
-reset.addEventListener('click', deactivateMap);
+reset.addEventListener('click', window.deactivateMap);
 
 // dragging the pinmain on the map --------------------------------------------
 
