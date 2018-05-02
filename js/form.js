@@ -2,53 +2,12 @@
 
 (function () {
 
-  var submitForm = document.querySelector('.ad-form');
   var formType = document.querySelector('#type');
   var formPrice = document.querySelector('#price');
   var formTimein = document.querySelector('#timein');
   var formTimeout = document.querySelector('#timeout');
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
-  var success = document.querySelector('.success');
-  var error = document.querySelector('.error');
-
-  // form data upload success and error handling ------------------------------
-
-  var showSuccess = function () {
-    success.classList.remove('hidden');
-  };
-
-  var hideSuccess = function () {
-    setTimeout(function () {
-      success.classList.add('hidden');
-    }, 3000);
-  };
-
-  var showError = function () {
-    error.classList.remove('hidden');
-  };
-
-  var hideError = function () {
-    setTimeout(function () {
-      error.classList.add('hidden');
-    }, 3000);
-  };
-
-  var formSuccessHandler = function () {
-    showSuccess();
-    window.deactivateMap();
-    hideSuccess();
-  };
-
-  var formErrorHandler = function () {
-    showError();
-    hideError();
-  };
-
-  submitForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(submitForm), formSuccessHandler, formErrorHandler);
-    evt.preventDefault();
-  });
 
   // form validation  ---------------------------------------------------------
 
@@ -155,4 +114,5 @@
   formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
   roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
   capacity.addEventListener('change', linkingRoomnumberAndCapacityReverse);
+
 })();

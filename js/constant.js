@@ -1,6 +1,7 @@
 'use strict';
 (function () {
-  window.const = {
+  window.constant = {
+    FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
     MIN_X: 300,
     MAX_X: 900,
     MIN_Y: 150,
@@ -16,9 +17,16 @@
     ENTER_KEYCODE: 13,
     POS_MIN_Y: 150,
     POS_MAX_Y: 500,
+    MIN_RENDER_PINS_NUM: 0,
+    MAX_RENDER_PINS_NUM: 5,
+    MIN_FILTER_PRICE: 10000,
+    MAX_FILTER_PRICE: 50000,
     formAddress: document.querySelector('#address'),
     mapPinMain: document.querySelector('.map__pin--main'),
     map: document.querySelector('.map'),
-    adCards: []
+    mapPins: document.querySelector('.map__pins'),
+    mapFilters: document.querySelector('.map__filters'),
+    adCards: [],
+    pinsArray: []
   };
 })();
