@@ -22,13 +22,16 @@
 
   var filterPinsCheck = function (it) {
     var filterType = document.querySelector('#housing-type').value;
+    var filterPrice = document.querySelector('#housing-price').value;
+    var filterRooms = document.querySelector('#housing-rooms').value;
+    var filterGuests = document.querySelector('#housing-guests').value;
+
     if (filterType !== 'any') {
       if (it.offer.type !== filterType) {
         return false;
       }
     }
 
-    var filterPrice = document.querySelector('#housing-price').value;
     if (filterPrice !== 'any') {
       if (filterPrice === 'low' && it.offer.price > window.constant.MIN_FILTER_PRICE) {
         return false;
@@ -39,14 +42,12 @@
       }
     }
 
-    var filterRooms = document.querySelector('#housing-rooms').value;
     if (filterRooms !== 'any') {
       if (it.offer.rooms !== parseInt(filterRooms, 10)) {
         return false;
       }
     }
 
-    var filterGuests = document.querySelector('#housing-guests').value;
     if (filterGuests !== 'any') {
       if (it.offer.guests !== parseInt(filterGuests, 10)) {
         return false;
