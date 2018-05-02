@@ -21,13 +21,19 @@
         onLoad(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+        window.constant.fieldsetMapFeatures.disabled = true;
       }
     });
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
+      window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+      window.constant.fieldsetMapFeatures.disabled = true;
     });
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+      window.constant.fieldsetMapFeatures.disabled = true;
     });
 
     xhr.timeout = SERVER_TIME;

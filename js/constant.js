@@ -26,6 +26,9 @@
     map: document.querySelector('.map'),
     mapPins: document.querySelector('.map__pins'),
     mapFilters: document.querySelector('.map__filters'),
+    fieldsetMapFilter: document.querySelectorAll('.map__filters-container select'),
+    fieldsetAdForm: document.querySelectorAll('.notice fieldset'),
+    fieldsetMapFeatures: document.querySelector('.map__features'),
     adCards: [],
     pinsArray: []
   };

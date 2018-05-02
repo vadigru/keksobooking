@@ -4,27 +4,13 @@
 
 window.popupCard = document.querySelector('.popup:last-child');
 var mapPinMain = document.querySelector('.map__pin--main');
-var fieldset = document.querySelectorAll('.notice fieldset');
 var form = document.querySelector('.notice form');
 var resetButton = document.querySelector('.ad-form__reset');
 var buttons;
 var buttonsImg;
 
 window.util.popupHide();
-
-var setInputDisabled = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    fieldset[i].disabled = true;
-  }
-};
-setInputDisabled(fieldset);
-
-
-var removeInputDisabled = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    fieldset[i].disabled = false;
-  }
-};
+window.util.setInputDisabled(window.constant.fieldsetAdForm);
 
 window.map = {
   removePins: function () {
@@ -42,7 +28,7 @@ window.map = {
     window.constant.map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
     mapPinMain.addEventListener('mouseup', activateMap);
-    setInputDisabled(fieldset);
+    window.util.setInputDisabled(window.constant.fieldsetAdForm);
     form.reset();
     window.constant.mapFilters.reset();
     window.map.removePins();
@@ -63,7 +49,7 @@ var activateMap = function (evt) {
   form.classList.remove('ad-form--disabled');
   mapPinMain.removeEventListener('mouseup', activateMap);
   window.pin.renderPins(window.constant.adCards.slice(window.constant.MIN_RENDER_PINS_NUM, window.constant.MAX_RENDER_PINS_NUM));
-  removeInputDisabled(fieldset);
+  window.util.removeInputDisabled(window.constant.fieldsetAdForm);
   buttons = document.querySelectorAll('.map__pins button[type="button"]');
   buttonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
   if (evt.keyCode === window.constant.ENTER_KEYCODE) {

@@ -70,7 +70,6 @@
     window.constant.pinsArray = window.constant.adCards.filter(function (it) {
       return filterPinsCheck(it);
     });
-    console.log(window.constant.pinsArray);
     updatePins(window.constant.pinsArray);
   };
 
