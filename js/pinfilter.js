@@ -3,15 +3,18 @@
 (function () {
 
   // pins filtering -----------------------------------------------------------
+  var mapWhole = document.querySelector('.map');
+  var mapPins = mapWhole.querySelector('.map__pins');
+  var mapFilters = mapWhole.querySelector('.map__filters');
 
   var updatePins = function (arr) {
     window.map.removePins();
     window.util.popupHide();
-    window.pin.renderPins(arr.slice(window.constant.MIN_RENDER_PINS_NUM, window.constant.MAX_RENDER_PINS_NUM));
-    window.constant.map.addEventListener('click', function (evt) {
+    window.pin.renderPins(arr.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
+    mapWhole.addEventListener('click', function (evt) {
       var target = evt.target;
-      var pinButtons = document.querySelectorAll('.map__pins button[type="button"]');
-      var pinButtonsImg = document.querySelectorAll('.map__pins button[type="button"]>img');
+      var pinButtons = mapPins.querySelectorAll('button[type="button"]');
+      var pinButtonsImg = mapPins.querySelectorAll('button[type="button"]>img');
       for (var i = 0; i < arr.length; i++) {
         if (target === pinButtons[i] || target === pinButtonsImg[i]) {
           window.map.renderNewPopup(arr[i]);
@@ -21,10 +24,15 @@
   };
 
   var filterPinsCheck = function (it) {
-    var filterType = document.querySelector('#housing-type').value;
-    var filterPrice = document.querySelector('#housing-price').value;
-    var filterRooms = document.querySelector('#housing-rooms').value;
-    var filterGuests = document.querySelector('#housing-guests').value;
+    var filterType = mapFilters.querySelector('#housing-type').value;
+    var filterPrice = mapFilters.querySelector('#housing-price').value;
+    var filterRooms = mapFilters.querySelector('#housing-rooms').value;
+    var filterGuests = mapFilters.querySelector('#housing-guests').value;
+    var price = it.offer.price;
+    var moreMinPrice = price > window.constant.MIN_PRICE;
+    var lessMinPrice = price < window.constant.MIN_PRICE;
+    var moreMaxPrice = price > window.constant.MAX_PRICE;
+    var lessMaxPrice = price < window.constant.MAX_PRICE;
 
     if (filterType !== 'any') {
       if (it.offer.type !== filterType) {
@@ -33,11 +41,11 @@
     }
 
     if (filterPrice !== 'any') {
-      if (filterPrice === 'low' && it.offer.price > window.constant.MIN_FILTER_PRICE) {
+      if (filterPrice === 'low' && moreMinPrice) {
         return false;
-      } else if (filterPrice === 'middle' && (it.offer.price < window.constant.MIN_FILTER_PRICE || it.offer.price > window.constant.MAX_FILTER_PRICE)) {
+      } else if (filterPrice === 'middle' && (lessMinPrice || moreMaxPrice)) {
         return false;
-      } else if (filterPrice === 'high' && it.offer.price < window.constant.MAX_FILTER_PRICE) {
+      } else if (filterPrice === 'high' && lessMaxPrice) {
         return false;
       }
     }
@@ -56,7 +64,7 @@
 
     for (var i = 0; i < window.constant.FEATURES.length; i++) {
       var feature = window.constant.FEATURES[i];
-      var element = document.querySelector('#filter-' + feature);
+      var element = mapFilters.querySelector('#filter-' + feature);
       if (element.checked) {
         if (!it.offer.features.includes(element.value)) {
           return false;
@@ -68,13 +76,13 @@
   };
 
   var filterPins = function () {
-    window.constant.pinsArray = window.constant.adCards.filter(function (it) {
+    window.pinsArray = window.adCards.filter(function (it) {
       return filterPinsCheck(it);
     });
-    updatePins(window.constant.pinsArray);
+    updatePins(window.pinsArray);
   };
 
-  window.constant.mapFilters.addEventListener('change', function () {
+  mapFilters.addEventListener('change', function () {
     window.debounce(filterPins);
   });
 

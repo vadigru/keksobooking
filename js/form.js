@@ -1,13 +1,15 @@
 'use strict';
 
 (function () {
-
-  var formType = document.querySelector('#type');
-  var formPrice = document.querySelector('#price');
-  var formTimein = document.querySelector('#timein');
-  var formTimeout = document.querySelector('#timeout');
-  var roomNumber = document.querySelector('#room_number');
-  var capacity = document.querySelector('#capacity');
+  var success = document.querySelector('.success');
+  var error = document.querySelector('.error');
+  var submitForm = document.querySelector('.ad-form');
+  var formType = submitForm.querySelector('#type');
+  var formPrice = submitForm.querySelector('#price');
+  var formTimein = submitForm.querySelector('#timein');
+  var formTimeout = submitForm.querySelector('#timeout');
+  var roomNumber = submitForm.querySelector('#room_number');
+  var capacity = submitForm.querySelector('#capacity');
 
   // form validation  ---------------------------------------------------------
 
@@ -80,39 +82,60 @@
     }
   };
 
-  var linkingRoomnumberAndCapacityReverse = function () {
-    var capacitySel = capacity.options[capacity.selectedIndex].value;
-    if (capacitySel === '3') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = true;
-      roomNumber.options[2].selected = true;
-      roomNumber.options[2].disabled = false;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '2') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = false;
-      roomNumber.options[2].selected = true;
-      roomNumber.options[2].disabled = false;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '1') {
-      roomNumber.options[0].disabled = false;
-      roomNumber.options[1].selected = true;
-      roomNumber.options[1].disabled = false;
-      roomNumber.options[2].disabled = true;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '0') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = true;
-      roomNumber.options[2].disabled = true;
-      roomNumber.options[3].selected = true;
-      roomNumber.options[3].disabled = false;
-    }
-  };
-
   formType.addEventListener('change', linkingTypeAndPrice);
   formTimein.addEventListener('change', linkingTimeinAndTimeout);
   formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
   roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
-  capacity.addEventListener('change', linkingRoomnumberAndCapacityReverse);
+
+  // form data upload success and error handling ------------------------------
+
+  var showSuccess = function () {
+    success.classList.remove('hidden');
+  };
+
+  var hideSuccess = function () {
+    setTimeout(function () {
+      success.classList.add('hidden');
+    }, 3000);
+  };
+
+  var showError = function () {
+    error.classList.remove('hidden');
+  };
+
+  var hideError = function () {
+    setTimeout(function () {
+      error.classList.add('hidden');
+    }, 3000);
+  };
+
+  var onSubmitSuccessHandle = function () {
+    showSuccess();
+    window.map.deactivateMap();
+    hideSuccess();
+  };
+
+  var onSubmitErrorHandle = function () {
+    showError();
+    hideError();
+  };
+
+  submitForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(submitForm), onSubmitSuccessHandle, onSubmitErrorHandle);
+    evt.preventDefault();
+  });
+
+  // error small dialog close -------------------------------------------------
+
+  document.addEventListener('click', function (evt) {
+    var mapWhole = document.querySelector('.map');
+    var target = evt.target;
+    var div = mapWhole.querySelector('.closeErrorDialog');
+    var divNested = mapWhole.querySelector('.errorDialog');
+    if (target.className === 'errorDialog' || target.className === 'closeErrorDialog') {
+      mapWhole.removeChild(div);
+      mapWhole.removeChild(divNested);
+    }
+  });
 
 })();
