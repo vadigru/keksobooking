@@ -38,9 +38,18 @@
     }
   };
 
+  for (var j = 0; j < capacity.length; j++) {
+    if (capacity[j].value === '1') {
+      capacity[j].disabled = false;
+      capacity[j].selected = true;
+    } else {
+      capacity[j].disabled = true;
+    }
+  }
+
   var linkingRoomNumberAndCapacity = function () {
     var roomNumberSel = roomNumber.value;
-    for (var i = 0; i < capacity.length; i++) {
+    for (var i = 0; i < roomNumber.length; i++) {
       if ((capacity[i].value <= roomNumberSel && capacity[i].value !== capacityMin && roomNumberSel !== roomNumberMax) ||
           (capacity[i].value === capacityMin && roomNumberSel === roomNumberMax)) {
         capacity[i].disabled = false;
@@ -51,8 +60,9 @@
   };
 
   var linkingRoomNumberAndCapacitySelected = function () {
+    var roomNumberSel = roomNumber.value;
     for (var i = 0; i < capacity.length; i++) {
-      if (roomNumber[i].value) {
+      if (roomNumber[i].value === roomNumberSel) {
         capacity[i].selected = true;
       } capacity[i].selected = false;
     }
@@ -103,13 +113,13 @@
 
   // error small dialog close -------------------------------------------------
   document.addEventListener('click', function (evt) {
-    var mapWhole = document.querySelector('.map');
+    var map = document.querySelector('.map');
     var target = evt.target;
-    var div = mapWhole.querySelector('.closeErrorDialog');
-    var divNested = mapWhole.querySelector('.errorDialog');
+    var div = map.querySelector('.closeErrorDialog');
+    var divNested = map.querySelector('.errorDialog');
     if (target.className === 'errorDialog' || target.className === 'closeErrorDialog') {
-      mapWhole.removeChild(div);
-      mapWhole.removeChild(divNested);
+      map.removeChild(div);
+      map.removeChild(divNested);
     }
   });
 })();

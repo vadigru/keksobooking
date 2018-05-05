@@ -1,8 +1,8 @@
 'use strict';
 (function () {
   // popup rendering ----------------------------------------------------------
-  var mapWhole = document.querySelector('.map');
-  var mapContainer = mapWhole.querySelector('.map__filter-container');
+  var map = document.querySelector('.map');
+  var mapContainer = map.querySelector('.map__filter-container');
   var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
   var popupElement = similarPopupElement.cloneNode(true);
 
@@ -60,7 +60,7 @@
     return popupElement;
   };
 
-  mapWhole.insertBefore(popupElement, mapContainer);
+  map.insertBefore(popupElement, mapContainer);
 
   window.card = {
     renderPopup: renderPopup

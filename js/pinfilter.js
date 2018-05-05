@@ -1,15 +1,15 @@
 'use strict';
 (function () {
   // pins filtering -----------------------------------------------------------
-  var mapWhole = document.querySelector('.map');
-  var mapPins = mapWhole.querySelector('.map__pins');
-  var mapFilters = mapWhole.querySelector('.map__filters');
+  var map = document.querySelector('.map');
+  var mapPins = map.querySelector('.map__pins');
+  var mapFilters = map.querySelector('.map__filters');
 
   var updatePins = function (arr) {
     window.map.removePins();
     window.util.popupHide();
     window.pin.renderPins(arr.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
-    mapWhole.addEventListener('click', function (evt) {
+    map.addEventListener('click', function (evt) {
       var target = evt.target;
       var pinButtons = mapPins.querySelectorAll('button[type="button"]');
       var pinButtonsImg = mapPins.querySelectorAll('button[type="button"]>img');

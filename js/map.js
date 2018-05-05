@@ -1,9 +1,9 @@
 'use strict';
 (function () {
-  var mapWhole = document.querySelector('.map');
-  var mapPins = mapWhole.querySelector('.map__pins');
-  var mapPinMain = mapWhole.querySelector('.map__pin--main');
-  var mapFilters = mapWhole.querySelector('.map__filters');
+  var map = document.querySelector('.map');
+  var mapPins = map.querySelector('.map__pins');
+  var mapPinMain = map.querySelector('.map__pin--main');
+  var mapFilters = map.querySelector('.map__filters');
   var fieldsetMapFilter = mapFilters.querySelectorAll('select');
   var form = document.querySelector('.notice form');
   var resetButton = form.querySelector('.ad-form__reset');
@@ -34,7 +34,7 @@
     node.style.fontSize = '16px';
     node.classList.add('errorDialog');
     node.textContent = errorMessage;
-    mapWhole.insertAdjacentElement('afterbegin', node);
+    map.insertAdjacentElement('afterbegin', node);
 
     var nodeIn = document.createElement('div');
     nodeIn.style = 'z-index: 101; color: black; cursor: pointer;';
@@ -44,7 +44,7 @@
     nodeIn.style.fontSize = '12px';
     nodeIn.classList.add('closeErrorDialog');
     nodeIn.textContent = 'x';
-    mapWhole.insertAdjacentElement('afterbegin', nodeIn);
+    map.insertAdjacentElement('afterbegin', nodeIn);
   };
 
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
@@ -68,7 +68,7 @@
   };
 
   var deactivateMap = function () {
-    mapWhole.classList.add('map--faded');
+    map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
     mapPinMain.addEventListener('mouseup', activateMap);
     window.util.setInputDisabled(fieldsetAdForm);
@@ -88,7 +88,7 @@
   };
 
   var activateMap = function (evt) {
-    mapWhole.classList.remove('map--faded');
+    map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
     mapPinMain.removeEventListener('mouseup', activateMap);
     window.pin.renderPins(window.adCards.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
@@ -107,14 +107,14 @@
     }
   });
 
-  mapWhole.addEventListener('click', function (evt) {
+  map.addEventListener('click', function (evt) {
     var target = evt.target;
     if (target.className === 'popup__close') {
       window.util.popupHide();
     }
   });
 
-  mapWhole.addEventListener('click', function (evt) {
+  map.addEventListener('click', function (evt) {
     var target = evt.target;
     for (var i = 0; i < buttons.length; i++) {
       if (target === buttons[i] || target === buttonsImg[i]) {
@@ -128,7 +128,7 @@
   mapPinMain.addEventListener('keydown', activateMap);
 
   // dragging the pinmain on the map --------------------------------------------
-  var mapWidth = mapWhole.offsetWidth;
+  var mapWidth = map.offsetWidth;
   var pinMainWidthHalf = Math.round(window.constant.PIN_WIDTH / 2);
   var pinMainHeightHalf = Math.round(window.constant.PIN_HEIGHT / 2);
   var initCoordX = Math.round(mapPinMain.offsetLeft + pinMainWidthHalf);
