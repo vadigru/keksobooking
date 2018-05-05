@@ -1,8 +1,6 @@
 'use strict';
 (function () {
-
   // pin creating -------------------------------------------------------------
-
   window.pin = {
     renderPins: function (adCardsData) {
       var fragment = document.createDocumentFragment();
@@ -17,5 +15,4 @@
       mapPins.appendChild(fragment);
     }
   };
-
 })();

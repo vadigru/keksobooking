@@ -1,7 +1,5 @@
 'use strict';
-
 (function () {
-
   // pins filtering -----------------------------------------------------------
   var mapWhole = document.querySelector('.map');
   var mapPins = mapWhole.querySelector('.map__pins');
@@ -41,11 +39,9 @@
     }
 
     if (filterPrice !== 'any') {
-      if (filterPrice === 'low' && moreMinPrice) {
-        return false;
-      } else if (filterPrice === 'middle' && (lessMinPrice || moreMaxPrice)) {
-        return false;
-      } else if (filterPrice === 'high' && lessMaxPrice) {
+      if ((filterPrice === 'low' && moreMinPrice) ||
+      (filterPrice === 'middle' && (lessMinPrice || moreMaxPrice)) ||
+      (filterPrice === 'high' && lessMaxPrice)) {
         return false;
       }
     }
@@ -83,7 +79,6 @@
   };
 
   mapFilters.addEventListener('change', function () {
-    window.debounce(filterPins);
+    window.util.debounce(filterPins);
   });
-
 })();

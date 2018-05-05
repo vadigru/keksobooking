@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   var mapWhole = document.querySelector('.map');
   var mapPins = mapWhole.querySelector('.map__pins');
   var mapPinMain = mapWhole.querySelector('.map__pin--main');
@@ -18,7 +17,6 @@
   window.pinsArray = [];
 
   // data load success and error handling -------------------------------------
-
   var onLoadSuccessHandle = function (data) {
     window.adCards = data;
     data.forEach(function (item, index) {
@@ -52,7 +50,6 @@
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
 
   // active/inactive map mode ---------------------------------------------------
-
   window.util.popupHide();
   window.util.setInputDisabled(fieldsetAdForm);
   window.util.setInputDisabled(fieldsetMapFilter);
@@ -131,7 +128,6 @@
   mapPinMain.addEventListener('keydown', activateMap);
 
   // dragging the pinmain on the map --------------------------------------------
-
   var mapWidth = mapWhole.offsetWidth;
   var pinMainWidthHalf = Math.round(window.constant.PIN_WIDTH / 2);
   var pinMainHeightHalf = Math.round(window.constant.PIN_HEIGHT / 2);
@@ -208,5 +204,4 @@
     renderNewPopup: renderNewPopup,
     deactivateMap: deactivateMap
   };
-
 })();

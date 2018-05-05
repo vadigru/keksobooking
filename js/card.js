@@ -1,8 +1,6 @@
 'use strict';
 (function () {
-
   // popup rendering ----------------------------------------------------------
-
   var mapWhole = document.querySelector('.map');
   var mapContainer = mapWhole.querySelector('.map__filter-container');
   var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
@@ -67,5 +65,4 @@
   window.card = {
     renderPopup: renderPopup
   };
-
 })();

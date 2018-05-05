@@ -1,9 +1,8 @@
 'use strict';
-
 (function () {
-
   var fieldsetMapFeatures = document.querySelector('.map__features');
   var popup = document.querySelector('.popup');
+  var lastTimeout;
 
   var popupHide = function () {
     popup.classList.add('hidden');
@@ -27,11 +26,18 @@
     }
   };
 
+  var debounce = function (f) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(f, window.constant.UPDATE_INTERVAL);
+  };
+
   window.util = {
     popupHide: popupHide,
     popupShow: popupShow,
     setInputDisabled: setInputDisabled,
-    removeInputDisabled: removeInputDisabled
+    removeInputDisabled: removeInputDisabled,
+    debounce: debounce
   };
-
 })();
