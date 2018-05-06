@@ -5,9 +5,16 @@
   var mapPins = map.querySelector('.map__pins');
   var mapFilters = map.querySelector('.map__filters');
 
+  var Value = {
+    any: 'any',
+    low: 'low',
+    middle: 'middle',
+    high: 'high'
+  };
+
   var updatePins = function (arr) {
     window.map.removePins();
-    window.util.popupHide();
+    window.map.popupHide();
     window.pin.renderPins(arr.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
     map.addEventListener('click', function (evt) {
       var target = evt.target;
@@ -33,18 +40,18 @@
     var maxPrice = price < window.constant.MAX_PRICE;
     var res = true;
 
-    if (filterType !== 'any' && it.offer.type !== filterType) {
+    if (filterType !== Value.any && it.offer.type !== filterType) {
       res = false;
     }
-    if (filterPrice !== 'any' && (filterPrice === 'low' && minPrice) ||
-    (filterPrice === 'middle' && rangePrice) ||
-    (filterPrice === 'high' && maxPrice)) {
+    if (filterPrice !== Value.any && (filterPrice === Value.low && minPrice) ||
+    (filterPrice === Value.middle && rangePrice) ||
+    (filterPrice === Value.high && maxPrice)) {
       res = false;
     }
-    if (filterRooms !== 'any' && it.offer.rooms !== parseInt(filterRooms, 10)) {
+    if (filterRooms !== Value.any && it.offer.rooms !== parseInt(filterRooms, 10)) {
       res = false;
     }
-    if (filterGuests !== 'any' && it.offer.guests !== parseInt(filterGuests, 10)) {
+    if (filterGuests !== Value.any && it.offer.guests !== parseInt(filterGuests, 10)) {
       res = false;
     }
 

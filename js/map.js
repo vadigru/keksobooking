@@ -50,7 +50,16 @@
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
 
   // active/inactive map mode ---------------------------------------------------
-  window.util.popupHide();
+  var popupHide = function () {
+    popup.classList.add('hidden');
+    document.addEventListener('keydown', onEscClose);
+  };
+
+  var popupShow = function () {
+    popup.classList.remove('hidden');
+  };
+
+  popupHide();
   window.util.setInputDisabled(fieldsetAdForm);
   window.util.setInputDisabled(fieldsetMapFilter);
 
@@ -64,58 +73,49 @@
 
   var renderNewPopup = function (arr) {
     window.card.renderPopup(arr);
-    window.util.popupShow();
+    popupShow();
   };
 
-  var deactivateMap = function () {
+  var onActivateHandle = function () {
+    map.classList.remove('map--faded');
+    form.classList.remove('ad-form--disabled');
+    window.pin.renderPins(window.adCards.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
+    window.util.removeInputDisabled(fieldsetAdForm);
+    window.util.removeInputDisabled(fieldsetMapFilter);
+    buttons = mapPins.querySelectorAll('button[type="button"]');
+    buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
+    resetButton.addEventListener('click', onDeactivateHandle);
+    mapPinMain.removeEventListener('mouseup', onActivateHandle);
+    mapPinMain.removeEventListener('keydown', onEnterOpen);
+  };
+
+  var onDeactivateHandle = function () {
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    mapPinMain.addEventListener('mouseup', activateMap);
     window.util.setInputDisabled(fieldsetAdForm);
     window.util.setInputDisabled(fieldsetMapFilter);
     form.reset();
     mapFilters.reset();
-    window.map.removePins();
+    removePins();
 
     if (popup) {
-      window.util.popupHide();
+      popupHide();
     }
 
     mapPinMain.style.left = mapPinMain.offsetLeft + 'px';
     mapPinMain.style.top = mapPinMain.offsetTop + 'px';
 
     setInitAddress();
+
+    resetButton.removeEventListener('click', onDeactivateHandle);
+    mapPinMain.addEventListener('mouseup', onActivateHandle);
+    mapPinMain.addEventListener('keydown', onEnterOpen);
   };
 
-  var activateMap = function (evt) {
-    map.classList.remove('map--faded');
-    form.classList.remove('ad-form--disabled');
-    mapPinMain.removeEventListener('mouseup', activateMap);
-    window.pin.renderPins(window.adCards.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
-    window.util.removeInputDisabled(fieldsetAdForm);
-    window.util.removeInputDisabled(fieldsetMapFilter);
+  map.addEventListener('click', function (evt) {
+    var target = evt.target;
     buttons = mapPins.querySelectorAll('button[type="button"]');
     buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-    if (evt.keyCode === window.constant.ENTER_KEYCODE) {
-      window.util.popupHide();
-    }
-  };
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.constant.ESC_KEYCODE) {
-      window.util.popupHide();
-    }
-  });
-
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
-    if (target.className === 'popup__close') {
-      window.util.popupHide();
-    }
-  });
-
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
     for (var i = 0; i < buttons.length; i++) {
       if (target === buttons[i] || target === buttonsImg[i]) {
         window.map.renderNewPopup(window.adCards[i]);
@@ -123,9 +123,26 @@
     }
   });
 
-  resetButton.addEventListener('click', deactivateMap);
-  mapPinMain.addEventListener('mouseup', activateMap);
-  mapPinMain.addEventListener('keydown', activateMap);
+  var onEnterOpen = function (evt) {
+    window.util.isEnterEvent(evt, onActivateHandle);
+  };
+
+
+  var onEscClose = function (evt) {
+    window.util.isEscEvent(evt, popupHide);
+  };
+
+  map.addEventListener('click', function (evt) {
+    var target = evt.target;
+    if (target.classList.contains('popup__close')) {
+      popupHide();
+    }
+  });
+
+
+  mapPinMain.addEventListener('mouseup', onActivateHandle);
+  mapPinMain.addEventListener('keydown', onEnterOpen);
+  document.addEventListener('keydown', onEscClose);
 
   // dragging the pinmain on the map --------------------------------------------
   var mapWidth = map.offsetWidth;
@@ -200,8 +217,9 @@
   });
 
   window.map = {
+    popupHide: popupHide,
     removePins: removePins,
     renderNewPopup: renderNewPopup,
-    deactivateMap: deactivateMap
+    onDeactivateHandle: onDeactivateHandle
   };
 })();

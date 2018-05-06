@@ -3,7 +3,7 @@
   var UPLOAD_URL = 'https://js.dump.academy/keksobooking';
   var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
   var SERVER_TIME = 10000;
-
+  var fieldsetMapFilter = document.querySelectorAll('select');
   var Code = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -22,24 +22,24 @@
         onLoad(xhr.response);
       } else if (xhr.status === Code.BAD_REQUEST) {
         onError('Неправильный запрос: ' + xhr.status);
-        window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+        window.util.setInputDisabled(fieldsetMapFilter);
       } else if (xhr.status === Code.NOT_FOUND) {
         onError('Ничего не найдено: ' + xhr.status);
-        window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+        window.util.setInputDisabled(fieldsetMapFilter);
       } else if (xhr.status === Code.INTERNAL_SERVER_ERROR) {
         onError('Внутренняя ошибка сервера: ' + xhr.status);
-        window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+        window.util.setInputDisabled(fieldsetMapFilter);
       }
     });
 
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
-      window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+      window.util.setInputDisabled(fieldsetMapFilter);
     });
 
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-      window.util.setInputDisabled(window.constant.fieldsetMapFilter);
+      window.util.setInputDisabled(fieldsetMapFilter);
     });
 
     xhr.timeout = SERVER_TIME;

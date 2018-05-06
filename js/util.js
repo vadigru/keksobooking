@@ -1,15 +1,18 @@
 'use strict';
 (function () {
   var fieldsetMapFeatures = document.querySelector('.map__features');
-  var popup = document.querySelector('.popup');
   var lastTimeout;
 
-  var popupHide = function () {
-    popup.classList.add('hidden');
+  var isEnterEvent = function (evt, action) {
+    if (evt.keyCode === window.constant.ENTER_KEYCODE) {
+      action();
+    }
   };
 
-  var popupShow = function () {
-    popup.classList.remove('hidden');
+  var isEscEvent = function (evt, action) {
+    if (evt.keyCode === window.constant.ESC_KEYCODE) {
+      action();
+    }
   };
 
   var setInputDisabled = function (arr) {
@@ -34,8 +37,8 @@
   };
 
   window.util = {
-    popupHide: popupHide,
-    popupShow: popupShow,
+    isEnterEvent: isEnterEvent,
+    isEscEvent: isEscEvent,
     setInputDisabled: setInputDisabled,
     removeInputDisabled: removeInputDisabled,
     debounce: debounce

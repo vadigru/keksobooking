@@ -13,7 +13,7 @@
   var capacityMin = capacity.querySelector('option:last-of-type').value;
 
   // form validation  ---------------------------------------------------------
-  var linkingTypeAndPrice = function () {
+  var linkTypeSelected = function () {
     var formTypeSel = formType.value;
     if (formType.value === formTypeSel) {
       formPrice.min = window.constant.MIN_PRICE_FOR[formTypeSel];
@@ -22,7 +22,7 @@
     }
   };
 
-  var linkingTimeinAndTimeout = function () {
+  var linkTimeSelected = function () {
     for (var i = 0; i < formTimein.length; i++) {
       if (formTimein[i].selected) {
         formTimeout[i].selected = true;
@@ -30,7 +30,7 @@
     }
   };
 
-  var linkingTimeinAndTimeoutReverse = function () {
+  var linkTimeSelectedReverse = function () {
     for (var i = 0; i < formTimeout.length; i++) {
       if (formTimeout[i].selected) {
         formTimein[i].selected = true;
@@ -47,7 +47,7 @@
     }
   }
 
-  var linkingRoomNumberAndCapacity = function () {
+  var linkRoomsSelected = function () {
     var roomNumberSel = roomNumber.value;
     for (var i = 0; i < roomNumber.length; i++) {
       var value = capacity[i].value;
@@ -61,7 +61,7 @@
     }
   };
 
-  var linkingRoomNumberAndCapacitySelected = function () {
+  var linkRoomsSelectedOrder = function () {
     var roomNumberSel = roomNumber.value;
     for (var i = 0; i < capacity.length; i++) {
       if (roomNumber[i].value === roomNumberSel) {
@@ -71,11 +71,11 @@
     }
   };
 
-  formType.addEventListener('change', linkingTypeAndPrice);
-  formTimein.addEventListener('change', linkingTimeinAndTimeout);
-  formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
-  roomNumber.addEventListener('change', linkingRoomNumberAndCapacity);
-  roomNumber.addEventListener('change', linkingRoomNumberAndCapacitySelected);
+  formType.addEventListener('change', linkTypeSelected);
+  formTimein.addEventListener('change', linkTimeSelected);
+  formTimeout.addEventListener('change', linkTimeSelectedReverse);
+  roomNumber.addEventListener('change', linkRoomsSelected);
+  roomNumber.addEventListener('change', linkRoomsSelectedOrder);
 
   // form data upload success and error handling ------------------------------
   var showSuccess = function () {
@@ -100,7 +100,7 @@
 
   var onSubmitSuccessHandle = function () {
     showSuccess();
-    window.map.deactivateMap();
+    window.map.onDeactivateHandle();
     hideSuccess();
   };
 

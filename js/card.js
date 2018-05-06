@@ -6,18 +6,25 @@
   var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
   var popupElement = similarPopupElement.cloneNode(true);
 
+  var Type = {
+    palace: 'palace',
+    flat: 'flat',
+    house: 'house',
+    bungalo: 'bungalo'
+  };
+
   var getType = function (type) {
     switch (type) {
-      case 'palace':
+      case Type.palace:
         type = 'Дворец';
         break;
-      case 'flat':
+      case Type.flat:
         type = 'Квартира';
         break;
-      case 'house':
+      case Type.house:
         type = 'Дом';
         break;
-      case 'bungalo':
+      case Type.bungalo:
         type = 'Бунгало';
         break;
     }
