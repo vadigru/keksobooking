@@ -14,6 +14,11 @@
     PIN_HEIGHT: 80,
     UPDATE_INTERVAL: 500,
     TIMEOUT_INTERVAL: 3000,
-    MIN_PRICE_FOR: {bungalo: 0, flat: 1000, house: 5000, palace: 10000}
+    MIN_PRICE_FOR: {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    }
   };
 })();

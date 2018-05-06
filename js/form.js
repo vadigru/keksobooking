@@ -50,8 +50,10 @@
   var linkingRoomNumberAndCapacity = function () {
     var roomNumberSel = roomNumber.value;
     for (var i = 0; i < roomNumber.length; i++) {
-      if ((capacity[i].value <= roomNumberSel && capacity[i].value !== capacityMin && roomNumberSel !== roomNumberMax) ||
-          (capacity[i].value === capacityMin && roomNumberSel === roomNumberMax)) {
+      var value = capacity[i].value;
+      var equal = (value === capacityMin && roomNumberSel === roomNumberMax);
+      var notEqual = (value !== capacityMin && roomNumberSel !== roomNumberMax);
+      if (value <= roomNumberSel && notEqual || equal) {
         capacity[i].disabled = false;
       } else {
         capacity[i].disabled = true;
@@ -64,7 +66,8 @@
     for (var i = 0; i < capacity.length; i++) {
       if (roomNumber[i].value === roomNumberSel) {
         capacity[i].selected = true;
-      } capacity[i].selected = false;
+      }
+      capacity[i].selected = false;
     }
   };
 

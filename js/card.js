@@ -24,13 +24,13 @@
     return type;
   };
 
-  var renderPhotos = function (item) {
+  var renderPhotos = function (photos) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < item.length; i++) {
+    photos.forEach(function (item) {
       var pixElement = document.querySelector('template').content.querySelector('.popup__photos').cloneNode(true);
-      pixElement.querySelector('img').src = item[i];
+      pixElement.querySelector('img').src = item;
       fragment.appendChild(pixElement);
-    }
+    });
     return fragment;
   };
 
