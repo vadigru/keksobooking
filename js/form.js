@@ -1,19 +1,83 @@
 'use strict';
-
 (function () {
-
-  var submitForm = document.querySelector('.ad-form');
-  var formType = document.querySelector('#type');
-  var formPrice = document.querySelector('#price');
-  var formTimein = document.querySelector('#timein');
-  var formTimeout = document.querySelector('#timeout');
-  var roomNumber = document.querySelector('#room_number');
-  var capacity = document.querySelector('#capacity');
   var success = document.querySelector('.success');
   var error = document.querySelector('.error');
+  var submitForm = document.querySelector('.ad-form');
+  var formType = submitForm.querySelector('#type');
+  var formPrice = submitForm.querySelector('#price');
+  var formTimein = submitForm.querySelector('#timein');
+  var formTimeout = submitForm.querySelector('#timeout');
+  var roomNumber = submitForm.querySelector('#room_number');
+  var roomNumberMax = roomNumber.querySelector('option:last-of-type').value;
+  var capacity = submitForm.querySelector('#capacity');
+  var capacityMin = capacity.querySelector('option:last-of-type').value;
+
+  // form validation  ---------------------------------------------------------
+  var linkingTypeAndPrice = function () {
+    var formTypeSel = formType.value;
+    if (formType.value === formTypeSel) {
+      formPrice.min = window.constant.MIN_PRICE_FOR[formTypeSel];
+      formPrice.placeholder = 'от ' + window.constant.MIN_PRICE_FOR[formTypeSel] + ' руб';
+      formPrice.value = '';
+    }
+  };
+
+  var linkingTimeinAndTimeout = function () {
+    for (var i = 0; i < formTimein.length; i++) {
+      if (formTimein[i].selected) {
+        formTimeout[i].selected = true;
+      }
+    }
+  };
+
+  var linkingTimeinAndTimeoutReverse = function () {
+    for (var i = 0; i < formTimeout.length; i++) {
+      if (formTimeout[i].selected) {
+        formTimein[i].selected = true;
+      }
+    }
+  };
+
+  for (var j = 0; j < capacity.length; j++) {
+    if (capacity[j].value === '1') {
+      capacity[j].disabled = false;
+      capacity[j].selected = true;
+    } else {
+      capacity[j].disabled = true;
+    }
+  }
+
+  var linkingRoomNumberAndCapacity = function () {
+    var roomNumberSel = roomNumber.value;
+    for (var i = 0; i < roomNumber.length; i++) {
+      var value = capacity[i].value;
+      var equal = (value === capacityMin && roomNumberSel === roomNumberMax);
+      var notEqual = (value !== capacityMin && roomNumberSel !== roomNumberMax);
+      if (value <= roomNumberSel && notEqual || equal) {
+        capacity[i].disabled = false;
+      } else {
+        capacity[i].disabled = true;
+      }
+    }
+  };
+
+  var linkingRoomNumberAndCapacitySelected = function () {
+    var roomNumberSel = roomNumber.value;
+    for (var i = 0; i < capacity.length; i++) {
+      if (roomNumber[i].value === roomNumberSel) {
+        capacity[i].selected = true;
+      }
+      capacity[i].selected = false;
+    }
+  };
+
+  formType.addEventListener('change', linkingTypeAndPrice);
+  formTimein.addEventListener('change', linkingTimeinAndTimeout);
+  formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
+  roomNumber.addEventListener('change', linkingRoomNumberAndCapacity);
+  roomNumber.addEventListener('change', linkingRoomNumberAndCapacitySelected);
 
   // form data upload success and error handling ------------------------------
-
   var showSuccess = function () {
     success.classList.remove('hidden');
   };
@@ -21,7 +85,7 @@
   var hideSuccess = function () {
     setTimeout(function () {
       success.classList.add('hidden');
-    }, 3000);
+    }, window.constant.TIMEOUT_INTERVAL);
   };
 
   var showError = function () {
@@ -31,128 +95,34 @@
   var hideError = function () {
     setTimeout(function () {
       error.classList.add('hidden');
-    }, 3000);
+    }, window.constant.TIMEOUT_INTERVAL);
   };
 
-  var formSuccessHandler = function () {
+  var onSubmitSuccessHandle = function () {
     showSuccess();
-    window.deactivateMap();
+    window.map.deactivateMap();
     hideSuccess();
   };
 
-  var formErrorHandler = function () {
+  var onSubmitErrorHandle = function () {
     showError();
     hideError();
   };
 
   submitForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(submitForm), formSuccessHandler, formErrorHandler);
+    window.backend.upload(new FormData(submitForm), onSubmitSuccessHandle, onSubmitErrorHandle);
     evt.preventDefault();
   });
 
-  // form validation  ---------------------------------------------------------
-
-  var linkingTypeAndPrice = function () {
-    if (formType.options[0].selected === true) {
-      formPrice.min = 1000;
-      formPrice.placeholder = 'от 1000 руб';
-      formPrice.value = '';
-    } else if (formType.options[1].selected === true) {
-      formPrice.min = 0;
-      formPrice.placeholder = 'от 0 руб';
-      formPrice.value = '';
-    } else if (formType.options[2].selected === true) {
-      formPrice.min = 5000;
-      formPrice.placeholder = 'от 5000 руб';
-      formPrice.value = '';
-    } else if (formType.options[3].selected === true) {
-      formPrice.min = 10000;
-      formPrice.placeholder = 'от 10000 руб';
-      formPrice.value = '';
+  // error small dialog close -------------------------------------------------
+  document.addEventListener('click', function (evt) {
+    var map = document.querySelector('.map');
+    var target = evt.target;
+    var div = map.querySelector('.closeErrorDialog');
+    var divNested = map.querySelector('.errorDialog');
+    if (target.className === 'errorDialog' || target.className === 'closeErrorDialog') {
+      map.removeChild(div);
+      map.removeChild(divNested);
     }
-  };
-
-  var linkingTimeinAndTimeout = function () {
-    if (formTimein.options[0].selected === true) {
-      formTimeout.options[0].selected = true;
-    } else if (formTimein.options[1].selected === true) {
-      formTimeout.options[1].selected = true;
-    } else if (formTimein.options[2].selected === true) {
-      formTimeout.options[2].selected = true;
-    }
-  };
-
-  var linkingTimeinAndTimeoutReverse = function () {
-    if (formTimeout.options[0].selected === true) {
-      formTimein.options[0].selected = true;
-    } else if (formTimeout.options[1].selected === true) {
-      formTimein.options[1].selected = true;
-    } else if (formTimeout.options[2].selected === true) {
-      formTimein.options[2].selected = true;
-    }
-  };
-
-  var linkingRoomnumberAndCapacity = function () {
-    var roomNumberSel = roomNumber.options[roomNumber.selectedIndex].value;
-    if (roomNumberSel === '1') {
-      capacity.options[0].disabled = true;
-      capacity.options[1].disabled = true;
-      capacity.options[2].selected = true;
-      capacity.options[2].disabled = false;
-      capacity.options[3].disabled = true;
-    } else if (roomNumberSel === '2') {
-      capacity.options[0].disabled = true;
-      capacity.options[1].selected = true;
-      capacity.options[1].disabled = false;
-      capacity.options[2].disabled = false;
-      capacity.options[3].disabled = true;
-    } else if (roomNumberSel === '3') {
-      capacity.options[0].selected = true;
-      capacity.options[0].disabled = false;
-      capacity.options[1].disabled = false;
-      capacity.options[2].disabled = false;
-      capacity.options[3].disabled = true;
-    } else if (roomNumberSel === '100') {
-      capacity.options[0].disabled = true;
-      capacity.options[1].disabled = true;
-      capacity.options[2].disabled = true;
-      capacity.options[3].disabled = false;
-      capacity.options[3].selected = true;
-    }
-  };
-
-  var linkingRoomnumberAndCapacityReverse = function () {
-    var capacitySel = capacity.options[capacity.selectedIndex].value;
-    if (capacitySel === '3') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = true;
-      roomNumber.options[2].selected = true;
-      roomNumber.options[2].disabled = false;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '2') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = false;
-      roomNumber.options[2].selected = true;
-      roomNumber.options[2].disabled = false;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '1') {
-      roomNumber.options[0].disabled = false;
-      roomNumber.options[1].selected = true;
-      roomNumber.options[1].disabled = false;
-      roomNumber.options[2].disabled = true;
-      roomNumber.options[3].disabled = true;
-    } else if (capacitySel === '0') {
-      roomNumber.options[0].disabled = true;
-      roomNumber.options[1].disabled = true;
-      roomNumber.options[2].disabled = true;
-      roomNumber.options[3].selected = true;
-      roomNumber.options[3].disabled = false;
-    }
-  };
-
-  formType.addEventListener('change', linkingTypeAndPrice);
-  formTimein.addEventListener('change', linkingTimeinAndTimeout);
-  formTimeout.addEventListener('change', linkingTimeinAndTimeoutReverse);
-  roomNumber.addEventListener('change', linkingRoomnumberAndCapacity);
-  capacity.addEventListener('change', linkingRoomnumberAndCapacityReverse);
+  });
 })();
