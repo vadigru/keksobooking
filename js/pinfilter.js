@@ -5,7 +5,7 @@
   var mapPins = map.querySelector('.map__pins');
   var mapFilters = map.querySelector('.map__filters');
 
-  var Value = {
+  var typeToValue = {
     any: 'any',
     low: 'low',
     middle: 'middle',
@@ -40,23 +40,23 @@
     var maxPrice = price < window.constant.MAX_PRICE;
     var res = true;
 
-    if (filterType !== Value.any && it.offer.type !== filterType) {
+    if (filterType !== typeToValue.any && it.offer.type !== filterType) {
       res = false;
     }
-    if (filterPrice !== Value.any && (filterPrice === Value.low && minPrice) ||
-    (filterPrice === Value.middle && rangePrice) ||
-    (filterPrice === Value.high && maxPrice)) {
+    if (filterPrice !== typeToValue.any && (filterPrice === typeToValue.low && minPrice) ||
+    (filterPrice === typeToValue.middle && rangePrice) ||
+    (filterPrice === typeToValue.high && maxPrice)) {
       res = false;
     }
-    if (filterRooms !== Value.any && it.offer.rooms !== parseInt(filterRooms, 10)) {
+    if (filterRooms !== typeToValue.any && it.offer.rooms !== parseInt(filterRooms, 10)) {
       res = false;
     }
-    if (filterGuests !== Value.any && it.offer.guests !== parseInt(filterGuests, 10)) {
+    if (filterGuests !== typeToValue.any && it.offer.guests !== parseInt(filterGuests, 10)) {
       res = false;
     }
 
-    window.constant.FEATURES.forEach(function (item, n) {
-      var feature = window.constant.FEATURES[n];
+    window.constant.FEATURES.forEach(function (item, i) {
+      var feature = window.constant.FEATURES[i];
       var element = mapFilters.querySelector('#filter-' + feature);
       if (element.checked && !it.offer.features.includes(element.value)) {
         res = false;

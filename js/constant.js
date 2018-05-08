@@ -19,6 +19,7 @@
       flat: 1000,
       house: 5000,
       palace: 10000
-    }
+    },
+    DEFAULT_AVATAR: 'img/muffin-grey.svg'
   };
 })();

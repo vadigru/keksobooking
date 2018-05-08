@@ -5,10 +5,23 @@
   var form = document.querySelector('.ad-form');
   var fileChooserAvatar = document.querySelector('.ad-form__field input[type="file"]');
   var fileChooserPhoto = document.querySelector('.ad-form__upload input[type="file"]');
-  var previewBlock = document.querySelector('.ad-form-header__preview img');
+  var preview = document.querySelector('.ad-form-header__preview img');
   var photoContainer = document.querySelector('.ad-form__photo-container');
   var photoTemplate = photoContainer.querySelector('.ad-form__photo');
 
+  // clear uploaded images ----------------------------------------------------
+  var clearAvatar = function () {
+    preview.src = window.constant.DEFAULT_AVATAR;
+  };
+
+  var clearPhotos = function () {
+    var addedPhotos = document.querySelectorAll('.addedPhoto');
+    [].forEach.call(addedPhotos, function (item) {
+      photoContainer.removeChild(item);
+    });
+  };
+
+  // create previews of uploaded images ---------------------------------------
   var createAvatar = function () {
     var file = fileChooserAvatar.files[0];
     if (!file) {
@@ -21,10 +34,10 @@
     if (matches) {
       var reader = new FileReader();
       reader.addEventListener('load', function () {
-        previewBlock.src = reader.result;
+        preview.src = reader.result;
       });
+      reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file);
   };
 
   var createPreview = function () {
@@ -41,6 +54,7 @@
       reader.addEventListener('load', function () {
         var photo = photoTemplate.cloneNode(true);
         var img = document.createElement('img');
+        photo.classList.add('addedPhoto');
         img.style.width = '70px';
         img.style.height = '70px';
         img.style.marginRight = '10px';
@@ -49,8 +63,8 @@
         photo.appendChild(img);
         photoContainer.insertBefore(photo, photoTemplate);
       });
+      reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file);
   };
 
   form.addEventListener('change', function (evt) {
@@ -61,4 +75,9 @@
       createAvatar();
     }
   });
+
+  window.photoupload = {
+    clearAvatar: clearAvatar,
+    clearPhotos: clearPhotos
+  };
 })();

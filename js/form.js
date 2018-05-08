@@ -23,7 +23,6 @@
   };
 
   var linkTimeSelected = function () {
-    // var formTimeinAll = submitForm.querySelectorAll('#timein option');
     [].forEach.call(formTimein, function (item, i) {
       if (formTimein[i].selected) {
         formTimeout[i].selected = true;

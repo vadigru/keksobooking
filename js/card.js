@@ -6,7 +6,7 @@
   var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
   var popupElement = similarPopupElement.cloneNode(true);
 
-  var changeValue = {
+  var typeToText = {
     'bungalo': 'Бунгало',
     'flat': 'Квартира',
     'house': 'Дом',
@@ -37,7 +37,7 @@
     popupElement.querySelector('.popup__title').textContent = popupData.offer.title;
     popupElement.querySelector('.popup__text--address').textContent = popupData.offer.address;
     popupElement.querySelector('.popup__text--price').textContent = popupData.offer.price + ' ₽/ночь';
-    popupElement.querySelector('.popup__type').textContent = changeValue[popupData.offer.type];
+    popupElement.querySelector('.popup__type').textContent = typeToText[popupData.offer.type];
     popupElement.querySelector('.popup__text--capacity').textContent = popupData.offer.rooms + ' комнаты для ' + popupData.offer.guests + ' гостей';
     popupElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + popupData.offer.checkin + ', ' + 'выезд до ' + popupData.offer.checkout;
     popupElement.querySelector('.popup__photos').textContent = '';
@@ -46,6 +46,7 @@
     popupElement.querySelector('.popup__features').appendChild(renderFeatures(popupData.offer.features));
     popupElement.querySelector('.popup__description').textContent = popupData.offer.descriprion;
     popupElement.querySelector('img').src = popupData.author.avatar;
+    document.addEventListener('keydown', window.map.onEscClose);
     return popupElement;
   };
 
