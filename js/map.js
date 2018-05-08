@@ -65,10 +65,9 @@
 
   var removePins = function () {
     buttons = mapPins.querySelectorAll('button[type="button"]');
-    buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-    for (var i = 0; i < buttons.length; i++) {
-      mapPins.removeChild(buttons[i]);
-    }
+    [].forEach.call(buttons, function (item) {
+      mapPins.removeChild(item);
+    });
   };
 
   var renderNewPopup = function (arr) {
@@ -116,11 +115,11 @@
     var target = evt.target;
     buttons = mapPins.querySelectorAll('button[type="button"]');
     buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-    for (var i = 0; i < buttons.length; i++) {
+    window.adCards.forEach(function (item, i) {
       if (target === buttons[i] || target === buttonsImg[i]) {
-        window.map.renderNewPopup(window.adCards[i]);
+        renderNewPopup(item);
       }
-    }
+    });
   });
 
   var onEnterOpen = function (evt) {

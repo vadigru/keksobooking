@@ -6,29 +6,11 @@
   var similarPopupElement = document.querySelector('template').content.querySelector('article.map__card');
   var popupElement = similarPopupElement.cloneNode(true);
 
-  var Type = {
-    palace: 'palace',
-    flat: 'flat',
-    house: 'house',
-    bungalo: 'bungalo'
-  };
-
-  var getType = function (type) {
-    switch (type) {
-      case Type.palace:
-        type = 'Дворец';
-        break;
-      case Type.flat:
-        type = 'Квартира';
-        break;
-      case Type.house:
-        type = 'Дом';
-        break;
-      case Type.bungalo:
-        type = 'Бунгало';
-        break;
-    }
-    return type;
+  var changeValue = {
+    'bungalo': 'Бунгало',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'palace': 'Дворец',
   };
 
   var renderPhotos = function (photos) {
@@ -55,7 +37,7 @@
     popupElement.querySelector('.popup__title').textContent = popupData.offer.title;
     popupElement.querySelector('.popup__text--address').textContent = popupData.offer.address;
     popupElement.querySelector('.popup__text--price').textContent = popupData.offer.price + ' ₽/ночь';
-    popupElement.querySelector('.popup__type').textContent = getType(popupData.offer.type);
+    popupElement.querySelector('.popup__type').textContent = changeValue[popupData.offer.type];
     popupElement.querySelector('.popup__text--capacity').textContent = popupData.offer.rooms + ' комнаты для ' + popupData.offer.guests + ' гостей';
     popupElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + popupData.offer.checkin + ', ' + 'выезд до ' + popupData.offer.checkout;
     popupElement.querySelector('.popup__photos').textContent = '';
