@@ -17,16 +17,16 @@
 
   var setInputDisabled = function (arr) {
     fieldsetMapFeatures.disabled = true;
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].disabled = true;
-    }
+    arr.forEach(function (item) {
+      item.disabled = true;
+    });
   };
 
   var removeInputDisabled = function (arr) {
     fieldsetMapFeatures.disabled = false;
-    for (var i = 0; i < arr.length; i++) {
-      arr[i].disabled = false;
-    }
+    arr.forEach(function (item) {
+      item.disabled = false;
+    });
   };
 
   var debounce = function (f) {

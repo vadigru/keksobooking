@@ -49,100 +49,6 @@
 
   window.backend.load(onLoadSuccessHandle, onLoadErrorHandle);
 
-  // active/inactive map mode ---------------------------------------------------
-  var popupHide = function () {
-    popup.classList.add('hidden');
-    document.addEventListener('keydown', onEscClose);
-  };
-
-  var popupShow = function () {
-    popup.classList.remove('hidden');
-  };
-
-  popupHide();
-  window.util.setInputDisabled(fieldsetAdForm);
-  window.util.setInputDisabled(fieldsetMapFilter);
-
-  var removePins = function () {
-    buttons = mapPins.querySelectorAll('button[type="button"]');
-    [].forEach.call(buttons, function (item) {
-      mapPins.removeChild(item);
-    });
-  };
-
-  var renderNewPopup = function (arr) {
-    window.card.renderPopup(arr);
-    popupShow();
-  };
-
-  var onActivateHandle = function () {
-    map.classList.remove('map--faded');
-    form.classList.remove('ad-form--disabled');
-    window.pin.renderPins(window.adCards.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
-    window.util.removeInputDisabled(fieldsetAdForm);
-    window.util.removeInputDisabled(fieldsetMapFilter);
-    buttons = mapPins.querySelectorAll('button[type="button"]');
-    buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-    resetButton.addEventListener('click', onDeactivateHandle);
-    mapPinMain.removeEventListener('mouseup', onActivateHandle);
-    mapPinMain.removeEventListener('keydown', onEnterOpen);
-  };
-
-  var onDeactivateHandle = function () {
-    map.classList.add('map--faded');
-    form.classList.add('ad-form--disabled');
-    window.util.setInputDisabled(fieldsetAdForm);
-    window.util.setInputDisabled(fieldsetMapFilter);
-    form.reset();
-    mapFilters.reset();
-    removePins();
-
-    if (popup) {
-      popupHide();
-    }
-
-    mapPinMain.style.left = mapPinMain.offsetLeft + 'px';
-    mapPinMain.style.top = mapPinMain.offsetTop + 'px';
-
-    setInitAddress();
-
-    resetButton.removeEventListener('click', onDeactivateHandle);
-    mapPinMain.addEventListener('mouseup', onActivateHandle);
-    mapPinMain.addEventListener('keydown', onEnterOpen);
-  };
-
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
-    buttons = mapPins.querySelectorAll('button[type="button"]');
-    buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-    window.adCards.forEach(function (item, i) {
-      if (target === buttons[i] || target === buttonsImg[i]) {
-        renderNewPopup(item);
-      }
-    });
-  });
-
-  var onEnterOpen = function (evt) {
-    window.util.isEnterEvent(evt, onActivateHandle);
-  };
-
-
-  var onEscClose = function (evt) {
-    window.util.isEscEvent(evt, popupHide);
-  };
-
-  map.addEventListener('click', function (evt) {
-    var target = evt.target;
-    if (target.classList.contains('popup__close')) {
-      popupHide();
-    }
-  });
-
-
-  mapPinMain.addEventListener('mouseup', onActivateHandle);
-  mapPinMain.addEventListener('keydown', onEnterOpen);
-  document.addEventListener('keydown', onEscClose);
-
   // dragging the pinmain on the map --------------------------------------------
   var mapWidth = map.offsetWidth;
   var pinMainWidthHalf = Math.round(window.constant.PIN_WIDTH / 2);
@@ -151,6 +57,8 @@
   var initCoordY = Math.round(mapPinMain.offsetTop + pinMainHeightHalf);
 
   var setInitAddress = function () {
+    mapPinMain.style.left = mapPinMain.offsetLeft + 'px';
+    mapPinMain.style.top = mapPinMain.offsetTop + 'px';
     formAddress.value = initCoordX + ', ' + initCoordY;
   };
 
@@ -215,10 +123,102 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  // active/inactive map mode ---------------------------------------------------
+  var popupHide = function () {
+    popup.classList.add('hidden');
+    document.addEventListener('keydown', onEscClose);
+  };
+
+  var popupShow = function () {
+    popup.classList.remove('hidden');
+  };
+
+  popupHide();
+  window.util.setInputDisabled(fieldsetAdForm);
+  window.util.setInputDisabled(fieldsetMapFilter);
+
+  var removePins = function () {
+    buttons = mapPins.querySelectorAll('button[type="button"]');
+    [].forEach.call(buttons, function (item) {
+      mapPins.removeChild(item);
+    });
+  };
+
+  var renderNewPopup = function (arr) {
+    window.card.renderPopup(arr);
+    popupShow();
+  };
+
+  var onActivateHandle = function () {
+    map.classList.remove('map--faded');
+    form.classList.remove('ad-form--disabled');
+    window.pin.renderPins(window.adCards.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
+    window.util.removeInputDisabled(fieldsetAdForm);
+    window.util.removeInputDisabled(fieldsetMapFilter);
+    // buttons = mapPins.querySelectorAll('button[type="button"]');
+    // buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
+    resetButton.addEventListener('click', onDeactivateHandle);
+    mapPinMain.removeEventListener('mouseup', onActivateHandle);
+    mapPinMain.removeEventListener('keydown', onEnterOpen);
+  };
+
+  var onDeactivateHandle = function () {
+    map.classList.add('map--faded');
+    form.classList.add('ad-form--disabled');
+    window.util.setInputDisabled(fieldsetAdForm);
+    window.util.setInputDisabled(fieldsetMapFilter);
+    form.reset();
+    mapFilters.reset();
+    removePins();
+
+    if (popup) {
+      popupHide();
+    }
+
+    setInitAddress();
+
+    resetButton.removeEventListener('click', onDeactivateHandle);
+    mapPinMain.addEventListener('mouseup', onActivateHandle);
+    mapPinMain.addEventListener('keydown', onEnterOpen);
+  };
+
+  map.addEventListener('click', function (evt) {
+    var target = evt.target;
+    buttons = mapPins.querySelectorAll('button[type="button"]');
+    buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
+    window.adCards.forEach(function (item, i) {
+      if (target === buttons[i] || target === buttonsImg[i]) {
+        renderNewPopup(item);
+      }
+    });
+  });
+
+  var onEnterOpen = function (evt) {
+    window.util.isEnterEvent(evt, onActivateHandle);
+  };
+
+
+  var onEscClose = function (evt) {
+    window.util.isEscEvent(evt, popupHide);
+  };
+
+  map.addEventListener('click', function (evt) {
+    var target = evt.target;
+    if (target.classList.contains('popup__close')) {
+      popupHide();
+    }
+  });
+
+
+  mapPinMain.addEventListener('mouseup', onActivateHandle);
+  mapPinMain.addEventListener('keydown', onEnterOpen);
+  document.addEventListener('keydown', onEscClose);
+
   window.map = {
     popupHide: popupHide,
     removePins: removePins,
     renderNewPopup: renderNewPopup,
     onDeactivateHandle: onDeactivateHandle
   };
+
 })();

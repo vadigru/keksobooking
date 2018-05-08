@@ -23,59 +23,50 @@
   };
 
   var linkTimeSelected = function () {
-    for (var i = 0; i < formTimein.length; i++) {
+    // var formTimeinAll = submitForm.querySelectorAll('#timein option');
+    [].forEach.call(formTimein, function (item, i) {
       if (formTimein[i].selected) {
         formTimeout[i].selected = true;
       }
-    }
+    });
   };
 
   var linkTimeSelectedReverse = function () {
-    for (var i = 0; i < formTimeout.length; i++) {
+    [].forEach.call(formTimein, function (item, i) {
       if (formTimeout[i].selected) {
         formTimein[i].selected = true;
       }
-    }
+    });
   };
 
-  for (var j = 0; j < capacity.length; j++) {
-    if (capacity[j].value === '1') {
-      capacity[j].disabled = false;
-      capacity[j].selected = true;
+  [].forEach.call(capacity, function (item, i) {
+    if (capacity[i].value === '1') {
+      capacity[i].disabled = false;
+      capacity[i].selected = true;
     } else {
-      capacity[j].disabled = true;
+      capacity[i].disabled = true;
     }
-  }
+  });
 
   var linkRoomsSelected = function () {
     var roomNumberSel = roomNumber.value;
-    for (var i = 0; i < roomNumber.length; i++) {
+    [].forEach.call(roomNumber, function (item, i) {
       var value = capacity[i].value;
       var equal = (value === capacityMin && roomNumberSel === roomNumberMax);
       var notEqual = (value !== capacityMin && roomNumberSel !== roomNumberMax);
       if (value <= roomNumberSel && notEqual || equal) {
         capacity[i].disabled = false;
+        capacity[i].selected = true;
       } else {
         capacity[i].disabled = true;
       }
-    }
-  };
-
-  var linkRoomsSelectedOrder = function () {
-    var roomNumberSel = roomNumber.value;
-    for (var i = 0; i < capacity.length; i++) {
-      if (roomNumber[i].value === roomNumberSel) {
-        capacity[i].selected = true;
-      }
-      capacity[i].selected = false;
-    }
+    });
   };
 
   formType.addEventListener('change', linkTypeSelected);
   formTimein.addEventListener('change', linkTimeSelected);
   formTimeout.addEventListener('change', linkTimeSelectedReverse);
   roomNumber.addEventListener('change', linkRoomsSelected);
-  roomNumber.addEventListener('change', linkRoomsSelectedOrder);
 
   // form data upload success and error handling ------------------------------
   var showSuccess = function () {

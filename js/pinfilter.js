@@ -18,13 +18,13 @@
     window.pin.renderPins(arr.slice(window.constant.MIN_PIN, window.constant.MAX_PIN));
     map.addEventListener('click', function (evt) {
       var target = evt.target;
-      var pinButtons = mapPins.querySelectorAll('button[type="button"]');
-      var pinButtonsImg = mapPins.querySelectorAll('button[type="button"]>img');
-      for (var i = 0; i < arr.length; i++) {
-        if (target === pinButtons[i] || target === pinButtonsImg[i]) {
-          window.map.renderNewPopup(arr[i]);
+      var buttons = mapPins.querySelectorAll('button[type="button"]');
+      var buttonsImg = mapPins.querySelectorAll('button[type="button"]>img');
+      arr.forEach(function (item, i) {
+        if (target === buttons[i] || target === buttonsImg[i]) {
+          window.map.renderNewPopup(item);
         }
-      }
+      });
     });
   };
 
