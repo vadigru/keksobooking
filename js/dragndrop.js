@@ -37,7 +37,7 @@
       draggedPhoto.src = evt.target.src;
       evt.target.src = draggedPhotoURL;
     }
-
+    evt.preventDefault();
   };
 
   var disableListeners = function () {

@@ -55,6 +55,8 @@
         var photo = photoTemplate.cloneNode(true);
         var img = document.createElement('img');
         var div = document.createElement('div');
+        var close;
+        var addedPhoto;
         img.style.width = '70px';
         img.style.height = '70px';
         img.style.marginRight = '10px';
@@ -84,8 +86,8 @@
         photo.appendChild(div);
         photo.appendChild(img);
         photoContainer.insertBefore(photo, photoTemplate);
-        var close = document.querySelectorAll('.addedPhotoClose');
-        var addedPhoto = document.querySelectorAll('.addedPhoto');
+        close = document.querySelectorAll('.addedPhotoClose');
+        addedPhoto = document.querySelectorAll('.addedPhoto');
         photoContainer.addEventListener('click', function (evt) {
           var target = evt.target;
           [].forEach.call(close, function (item, i) {
