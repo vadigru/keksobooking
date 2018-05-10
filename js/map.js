@@ -86,6 +86,7 @@
     resetButton.addEventListener('click', onDeactivateHandle);
     mapPinMain.removeEventListener('mouseup', onActivateHandle);
     mapPinMain.removeEventListener('keydown', onEnterOpen);
+    window.dragndrop.enableListeners();
   };
 
   var onDeactivateHandle = function () {
@@ -108,6 +109,7 @@
     resetButton.removeEventListener('click', onDeactivateHandle);
     mapPinMain.addEventListener('mouseup', onActivateHandle);
     mapPinMain.addEventListener('keydown', onEnterOpen);
+    window.dragndrop.disableListeners();
   };
 
   map.addEventListener('click', function (evt) {

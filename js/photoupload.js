@@ -54,14 +54,46 @@
       reader.addEventListener('load', function () {
         var photo = photoTemplate.cloneNode(true);
         var img = document.createElement('img');
-        photo.classList.add('addedPhoto');
+        var div = document.createElement('div');
         img.style.width = '70px';
         img.style.height = '70px';
         img.style.marginRight = '10px';
         img.style.borderRadius = '5px';
+        img.style.position = 'relative';
+        img.style.top = '-20px';
         img.src = reader.result;
+        div.style.width = '20px';
+        div.style.height = '20px';
+        div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+        div.style.position = 'relative';
+        div.style.zIndex = '1';
+        div.style.border = '1px solid black';
+        div.style.left = '55px';
+        div.style.top = '-5px';
+        div.style.margin = '0px';
+        div.style.padding = '0px';
+        div.style.color = 'rgb(255, 86, 53)';
+        div.textContent = 'x';
+        div.style.textAlign = 'center';
+        div.style.lineHeight = '15px';
+        div.style.fontWeight = '800';
+        div.style.borderRadius = '24px';
+        div.style.cursor = 'pointer';
+        photo.classList.add('addedPhoto');
+        div.classList.add('addedPhotoClose');
+        photo.appendChild(div);
         photo.appendChild(img);
         photoContainer.insertBefore(photo, photoTemplate);
+        var close = document.querySelectorAll('.addedPhotoClose');
+        var addedPhoto = document.querySelectorAll('.addedPhoto');
+        photoContainer.addEventListener('click', function (evt) {
+          var target = evt.target;
+          [].forEach.call(close, function (item, i) {
+            if (target === close[i]) {
+              addedPhoto[i].remove(addedPhoto[i]);
+            }
+          });
+        });
       });
       reader.readAsDataURL(file);
     }
@@ -78,6 +110,8 @@
 
   window.photoupload = {
     clearAvatar: clearAvatar,
-    clearPhotos: clearPhotos
+    clearPhotos: clearPhotos,
+    createAvatar: createAvatar,
+    createPreview: createPreview
   };
 })();
