@@ -69,7 +69,7 @@
         div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
         div.style.position = 'relative';
         div.style.zIndex = '1';
-        div.style.border = '1px solid black';
+        div.style.border = '1px solid rgb(255, 86, 53)';
         div.style.left = '55px';
         div.style.top = '-5px';
         div.style.margin = '0px';

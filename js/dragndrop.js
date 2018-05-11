@@ -4,64 +4,57 @@
   var draggedPhoto;
   var draggedPhotoURL;
   var adForm = document.querySelector('.ad-form');
-  var headerUpload = adForm.querySelector('.ad-form-header__upload');
-  var avatar = headerUpload.querySelector('#avatar');
-  var dropZoneHeader = headerUpload.querySelector('.ad-form-header__drop-zone');
-  var photoContainer = adForm.querySelector('.ad-form__photo-container');
-  var images = photoContainer.querySelector('#images');
-  var dropZoneImages = photoContainer.querySelector('.ad-form__drop-zone');
+  var avatar = adForm.querySelector('#avatar');
+  var image = adForm.querySelector('#images');
+  var avatarZone = adForm.querySelector('.ad-form-header__drop-zone');
+  var imageZone = adForm.querySelector('.ad-form__photo-container');
 
-  var prevent = function (evt) {
+  var onDragOverHandler = function (evt) {
     evt.preventDefault();
   };
-  var onDragAvatarHandle = function (evt) {
+
+  var onDropAvatarHandler = function (evt) {
     evt.preventDefault();
     avatar.files = evt.dataTransfer.files;
   };
 
-  var onDragImageHandle = function (evt) {
+  var onDropImageHandler = function (evt) {
     evt.preventDefault();
-    images.files = evt.dataTransfer.files;
+    image.files = evt.dataTransfer.files;
   };
 
-  var onDragSortStartHandle = function (evt) {
+  var onStartSortHandler = function (evt) {
     if (evt.target.tagName.toLowerCase() === 'img') {
       draggedPhoto = evt.target;
       draggedPhotoURL = draggedPhoto.src;
     }
   };
 
-  var onDragSortDropHandle = function (evt) {
+  var onDropSortHandler = function (evt) {
+    evt.preventDefault();
     if (evt.target.tagName.toLowerCase() === 'img' &&
         evt.target !== draggedPhoto) {
       draggedPhoto.src = evt.target.src;
       evt.target.src = draggedPhotoURL;
     }
-    evt.preventDefault();
   };
 
   var disableListeners = function () {
-    dropZoneHeader.removeEventListener('dragover', prevent);
-    dropZoneHeader.removeEventListener('dragenter', prevent);
-    dropZoneHeader.removeEventListener('drop', onDragAvatarHandle);
-    dropZoneImages.removeEventListener('dragover', prevent);
-    dropZoneImages.removeEventListener('dragenter', prevent);
-    dropZoneImages.removeEventListener('drop', onDragImageHandle);
-    photoContainer.removeEventListener('dragstart', onDragSortStartHandle);
-    photoContainer.removeEventListener('dragover', prevent);
-    photoContainer.removeEventListener('drop', onDragSortDropHandle);
+    avatarZone.removeEventListener('dragover', onDragOverHandler);
+    avatarZone.removeEventListener('drop', onDropAvatarHandler);
+    imageZone.removeEventListener('dragstart', onStartSortHandler);
+    imageZone.removeEventListener('dragover', onDragOverHandler);
+    imageZone.removeEventListener('drop', onDropSortHandler);
+    imageZone.removeEventListener('drop', onDropImageHandler);
   };
 
   var enableListeners = function () {
-    dropZoneHeader.addEventListener('dragover', prevent);
-    dropZoneHeader.addEventListener('dragenter', prevent);
-    dropZoneHeader.addEventListener('drop', onDragAvatarHandle);
-    dropZoneImages.addEventListener('dragover', prevent);
-    dropZoneImages.addEventListener('dragenter', prevent);
-    dropZoneImages.addEventListener('drop', onDragImageHandle);
-    photoContainer.addEventListener('dragstart', onDragSortStartHandle);
-    photoContainer.addEventListener('dragover', prevent);
-    photoContainer.addEventListener('drop', onDragSortDropHandle);
+    avatarZone.addEventListener('dragover', onDragOverHandler);
+    avatarZone.addEventListener('drop', onDropAvatarHandler);
+    imageZone.addEventListener('dragstart', onStartSortHandler);
+    imageZone.addEventListener('dragover', onDragOverHandler);
+    imageZone.addEventListener('drop', onDropSortHandler);
+    imageZone.addEventListener('drop', onDropImageHandler);
   };
 
   window.dragndrop = {
