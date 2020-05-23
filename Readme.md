@@ -1,4 +1,4 @@
-# Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
+# Личный проект «Keksobooking» [![Build status][travis-image]][travis-url]
 
 * Студент: [Vadim Grunenko](https://up.htmlacademy.ru/javascript/13/user/507341).
 * Наставник: [Екатерина Кащенко](https://htmlacademy.ru/profile/id109008).
