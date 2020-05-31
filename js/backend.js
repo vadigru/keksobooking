@@ -2,6 +2,7 @@
 (function () {
   var UPLOAD_URL = 'https://javascript.pages.academy/keksobooking';
   var LOAD_URL = 'https://javascript.pages.academy/keksobooking/data';
+
   var SERVER_TIME = 10000;
   var fieldsetMapFilter = document.querySelectorAll('select');
   var Code = {
