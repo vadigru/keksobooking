@@ -2,7 +2,7 @@
 
 * Студент: [Vadim Grunenko](https://up.htmlacademy.ru/javascript/13/user/507341).
 * Наставник: [Екатерина Кащенко](https://htmlacademy.ru/profile/id109008).
-* Онлайн версия: vadigru.github.io/keksobooking
+* Онлайн версия: https://vadigru.github.io/keksobooking/
 
 ---
 
