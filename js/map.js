@@ -20,6 +20,7 @@
 
   // data load success and error handling -------------------------------------
   var onLoadSuccessHandle = function (data) {
+    data = window.util.shuffleArray(data);
     window.adCards = data;
     data.forEach(function (item, index) {
       item.id = index;

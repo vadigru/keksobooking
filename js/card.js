@@ -41,9 +41,13 @@
     popupElement.querySelector('.popup__text--capacity').textContent = popupData.offer.rooms + ' комнаты для ' + popupData.offer.guests + ' гостей';
     popupElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + popupData.offer.checkin + ', ' + 'выезд до ' + popupData.offer.checkout;
     popupElement.querySelector('.popup__photos').textContent = '';
-    popupElement.querySelector('.popup__photos').appendChild(renderPhotos(popupData.offer.photos));
+    if (popupData.offer.photos && popupData.offer.photos.length > 0) {
+      popupElement.querySelector('.popup__photos').appendChild(renderPhotos(popupData.offer.photos));
+    }
     popupElement.querySelector('.popup__features').textContent = '';
-    popupElement.querySelector('.popup__features').appendChild(renderFeatures(popupData.offer.features));
+    if (popupData.offer.features && popupData.offer.features.length > 0) {
+      popupElement.querySelector('.popup__features').appendChild(renderFeatures(popupData.offer.features));
+    }
     popupElement.querySelector('.popup__description').textContent = popupData.offer.descriprion;
     popupElement.querySelector('img').src = popupData.author.avatar;
     document.addEventListener('keydown', window.map.onEscClose);

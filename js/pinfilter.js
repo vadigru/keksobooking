@@ -58,7 +58,7 @@
     window.constant.FEATURES.forEach(function (item, i) {
       var feature = window.constant.FEATURES[i];
       var element = mapFilters.querySelector('#filter-' + feature);
-      if (element.checked && !it.offer.features.includes(element.value)) {
+      if (element.checked && it.offer.features && !it.offer.features.includes(element.value)) {
         res = false;
       }
     });
